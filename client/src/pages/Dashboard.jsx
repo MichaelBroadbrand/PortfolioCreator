@@ -1,0 +1,162 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Layers, Eye, Globe, Plus, FileText } from 'lucide-react';
+import DashboardLayout from '../components/layout/DashboardLayout';
+import PortfolioCard from '../components/dashboard/PortfolioCard';
+import ConfirmDialog from '../components/common/ConfirmDialog';
+import Button from '../components/common/Button';
+import { InlineLoader } from '../components/common/Loader';
+import { useToast } from '../context/ThemeContext';
+import {
+  getPortfolios,
+  duplicatePortfolio,
+  deletePortfolio,
+} from '../services/portfolioService';
+import { getAnalyticsOverview } from '../services/analyticsService';
+import { MAX_PORTFOLIOS_FREE } from '../utils/constants';
+
+function StatCard({ icon: Icon, label, value, color }) {
+  return (
+    <div className="bg-white rounded-xl shadow-sm p-5 flex items-center gap-4">
+      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${color}`}>
+        <Icon className="w-6 h-6" />
+      </div>
+      <div>
+        <p className="text-3xl font-bold text-surface-900">{value}</p>
+        <p className="text-sm text-surface-500">{label}</p>
+      </div>
+    </div>
+  );
+}
+
+export default function Dashboard() {
+  const navigate = useNavigate();
+  const toast = useToast();
+  const [portfolios, setPortfolios] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [totalViews, setTotalViews] = useState(0);
+
+  useEffect(() => {
+    loadPortfolios();
+    loadAnalytics();
+  }, []);
+
+  async function loadPortfolios() {
+    setLoading(true);
+    try {
+      const data = await getPortfolios();
+      setPortfolios(data);
+    } catch (err) {
+      console.error('[Dashboard] Failed to load portfolios:', err);
+      setPortfolios([]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function loadAnalytics() {
+    try {
+      const overview = await getAnalyticsOverview();
+      setTotalViews(overview.totalViews || 0);
+    } catch {
+      // Analytics are non-critical, keep totalViews at 0
+    }
+  }
+
+  async function handleDuplicate(id) {
+    try {
+      await duplicatePortfolio(id);
+      toast.success('Portfolio duplicated!');
+      loadPortfolios();
+    } catch (err) {
+      toast.error(err.message || 'Failed to duplicate');
+    }
+  }
+
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    try {
+      await deletePortfolio(deleteTarget._id);
+      toast.success('Portfolio deleted');
+      setPortfolios((prev) => prev.filter((p) => p._id !== deleteTarget._id));
+    } catch (err) {
+      toast.error(err.message || 'Failed to delete');
+    } finally {
+      setDeleteTarget(null);
+    }
+  }
+
+  const publishedCount = portfolios.filter((p) => p.status === 'published').length;
+  const atLimit = portfolios.length >= MAX_PORTFOLIOS_FREE;
+  const nearLimit = portfolios.length >= MAX_PORTFOLIOS_FREE - 1;
+
+  return (
+    <DashboardLayout>
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-2xl font-bold text-surface-900 mb-6">
+          Welcome back
+        </h1>
+
+        {/* Stat cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <StatCard icon={Layers} label="Total Portfolios" value={portfolios.length} color="bg-brand-100 text-brand-600" />
+          <StatCard icon={Eye} label="Total Views" value={totalViews} color="bg-success-100 text-success-600" />
+          <StatCard icon={Globe} label="Published" value={publishedCount} color="bg-blue-100 text-blue-600" />
+        </div>
+
+        {nearLimit && !atLimit && (
+          <div className="mb-4 bg-accent-50 border border-accent-200 rounded-lg px-4 py-3 flex items-center justify-between">
+            <p className="text-sm text-accent-700">
+              You've used {portfolios.length} of {MAX_PORTFOLIOS_FREE} free portfolios. Upgrade for unlimited.
+            </p>
+            <button
+              onClick={() => toast.info('Upgrade plans coming soon!')}
+              className="text-sm font-medium text-accent-700 hover:text-accent-800 underline"
+            >
+              Upgrade
+            </button>
+          </div>
+        )}
+
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold text-surface-900">Your Portfolios</h2>
+          <Button size="sm" onClick={() => navigate('/templates')} disabled={atLimit}>
+            <Plus className="w-4 h-4 mr-1" /> Create New
+          </Button>
+        </div>
+
+        {loading && <div className="py-16"><InlineLoader /></div>}
+
+        {!loading && portfolios.length === 0 && (
+          <div className="text-center py-16 bg-white rounded-xl shadow-sm">
+            <div className="w-20 h-20 bg-surface-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <FileText className="w-10 h-10 text-surface-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-surface-900 mb-2">Create your first portfolio</h3>
+            <p className="text-surface-500 mb-6">Choose a template and start building in minutes</p>
+            <Button onClick={() => navigate('/templates')}>Browse Templates</Button>
+          </div>
+        )}
+
+        {!loading && portfolios.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {portfolios.map((p) => (
+              <PortfolioCard key={p._id} portfolio={p} onDuplicate={handleDuplicate} onDelete={setDeleteTarget} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {deleteTarget && (
+        <ConfirmDialog
+          title="Delete Portfolio"
+          message={`Are you sure you want to delete "${deleteTarget.name}"? This action can be undone within 30 days.`}
+          confirmLabel="Delete"
+          onConfirm={handleDelete}
+          onCancel={() => setDeleteTarget(null)}
+        />
+      )}
+    </DashboardLayout>
+  );
+}
