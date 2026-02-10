@@ -375,16 +375,18 @@ const sectionLabels = {
 
 /* ── Main Layout ──────────────────────────────────────────────────────── */
 
-export default function SplitLayout({ portfolio }) {
+export default function SplitLayout({ portfolio, editorProps }) {
   const theme = portfolio.theme || {};
   const cs = theme.colorScheme || {};
   const isDark = theme.mode === 'dark';
   const fonts = useGoogleFonts(theme.fontPairing);
   const spacing = spacingMap[theme.spacing] || spacingMap.normal;
+  const SectionWrap = editorProps?.SectionWrapper;
 
-  const visibleSections = [...(portfolio.sections || [])]
-    .filter((s) => s.visible)
-    .sort((a, b) => a.order - b.order);
+  const allSorted = [...(portfolio.sections || [])].sort((a, b) => a.order - b.order);
+  const visibleSections = editorProps?.showHidden
+    ? allSorted
+    : allSorted.filter((s) => s.visible);
 
   const heroSection = visibleSections.find((s) => s.type === 'hero');
   const heroContent = heroSection?.content || {};
@@ -393,20 +395,28 @@ export default function SplitLayout({ portfolio }) {
   /* Alternating index tracks only non-hero, non-contact sections */
   let altIndex = 0;
 
+  const heroEl = heroSection
+    ? <Hero content={heroContent} cs={cs} fonts={fonts} />
+    : null;
+
   return (
     <div style={{ backgroundColor: cs.background, color: cs.text, fontFamily: fonts.body, minHeight: '100vh' }}>
       {/* Hero */}
-      {heroSection && <Hero content={heroContent} cs={cs} fonts={fonts} />}
+      {heroEl && (SectionWrap
+        ? <SectionWrap section={heroSection}>{heroEl}</SectionWrap>
+        : heroEl
+      )}
 
       {/* Content sections */}
       {contentSections.map((section) => {
         const content = section.content || {};
+        let sectionEl;
 
         /* Contact — full-width centered */
         if (section.type === 'contact') {
-          return (
+          sectionEl = (
             <section
-              key={section._id}
+              key={SectionWrap ? undefined : section._id}
               id={section.type}
               style={{ padding: `${spacing.section} 1.5rem` }}
             >
@@ -416,49 +426,53 @@ export default function SplitLayout({ portfolio }) {
               </div>
             </section>
           );
+        } else {
+          const Renderer = sectionRenderers[section.type];
+          if (!Renderer) return null;
+
+          const align = altIndex % 2 === 0 ? 'left' : 'right';
+          const label = section.type === 'custom'
+            ? (content.title || sectionLabels.custom)
+            : (sectionLabels[section.type] || section.type);
+
+          altIndex++;
+
+          sectionEl = (
+            <section
+              key={SectionWrap ? undefined : section._id}
+              id={section.type}
+              className="relative"
+              style={{ padding: `${spacing.section} 1.5rem` }}
+            >
+              {/* Decorative circle for alternating sides */}
+              <div
+                className="hidden md:block absolute rounded-full pointer-events-none"
+                style={{
+                  width: 200,
+                  height: 200,
+                  [align === 'left' ? 'right' : 'left']: '-60px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  backgroundColor: `${cs.primary}08`,
+                }}
+              />
+              <div style={{ maxWidth: '64rem', margin: '0 auto', position: 'relative' }}>
+                <SectionHeading title={label} align={align} cs={cs} fonts={fonts} />
+                <Renderer
+                  content={content}
+                  cs={cs}
+                  fonts={fonts}
+                  isDark={isDark}
+                  align={align}
+                />
+              </div>
+            </section>
+          );
         }
 
-        const Renderer = sectionRenderers[section.type];
-        if (!Renderer) return null;
-
-        const align = altIndex % 2 === 0 ? 'left' : 'right';
-        const label = section.type === 'custom'
-          ? (content.title || sectionLabels.custom)
-          : (sectionLabels[section.type] || section.type);
-
-        altIndex++;
-
-        return (
-          <section
-            key={section._id}
-            id={section.type}
-            className="relative"
-            style={{ padding: `${spacing.section} 1.5rem` }}
-          >
-            {/* Decorative circle for alternating sides */}
-            <div
-              className="hidden md:block absolute rounded-full pointer-events-none"
-              style={{
-                width: 200,
-                height: 200,
-                [align === 'left' ? 'right' : 'left']: '-60px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                backgroundColor: `${cs.primary}08`,
-              }}
-            />
-            <div style={{ maxWidth: '64rem', margin: '0 auto', position: 'relative' }}>
-              <SectionHeading title={label} align={align} cs={cs} fonts={fonts} />
-              <Renderer
-                content={content}
-                cs={cs}
-                fonts={fonts}
-                isDark={isDark}
-                align={align}
-              />
-            </div>
-          </section>
-        );
+        return SectionWrap
+          ? <SectionWrap key={section._id} section={section}>{sectionEl}</SectionWrap>
+          : sectionEl;
       })}
 
       {/* Footer accent line */}

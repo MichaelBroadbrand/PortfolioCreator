@@ -244,26 +244,29 @@ const sectionRenderers = {
 
 /* ── Main Layout ─────────────────────────────────────────────────────── */
 
-export default function StandardLayout({ portfolio }) {
+export default function StandardLayout({ portfolio, editorProps }) {
   const theme = portfolio.theme || {};
   const cs = theme.colorScheme || {};
   const isDark = theme.mode === 'dark';
   const fonts = parseFontPairing(theme.fontPairing);
   const spacing = spacingMap[theme.spacing] || spacingMap.normal;
+  const SectionWrap = editorProps?.SectionWrapper;
 
   useGoogleFonts(theme.fontPairing);
 
   const [showNav, setShowNav] = useState(false);
 
   useEffect(() => {
+    if (editorProps) return;
     const onScroll = () => setShowNav(window.scrollY > 300);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [editorProps]);
 
-  const visibleSections = [...(portfolio.sections || [])]
-    .filter((s) => s.visible)
-    .sort((a, b) => a.order - b.order);
+  const allSorted = [...(portfolio.sections || [])].sort((a, b) => a.order - b.order);
+  const visibleSections = editorProps?.showHidden
+    ? allSorted
+    : allSorted.filter((s) => s.visible);
 
   const navSections = visibleSections.filter((s) => s.type !== 'hero');
 
@@ -273,34 +276,36 @@ export default function StandardLayout({ portfolio }) {
 
   return (
     <div style={{ backgroundColor: isDark ? '#0a0a0a' : cs.background, fontFamily: fonts.body, minHeight: '100vh' }}>
-      {/* Sticky nav */}
-      <nav
-        className="fixed top-0 left-0 right-0 z-50 transition-transform duration-300"
-        style={{
-          transform: showNav ? 'translateY(0)' : 'translateY(-100%)',
-          backgroundColor: isDark ? `${cs.background}ee` : '#ffffffee',
-          backdropFilter: 'blur(12px)',
-          borderBottom: `1px solid ${isDark ? cs.text + '10' : 'rgba(0,0,0,0.06)'}`,
-        }}
-      >
-        <div className="max-w-4xl mx-auto px-6 py-3 flex items-center justify-between">
-          <span className="font-semibold text-sm" style={{ color: cs.text, fontFamily: fonts.heading }}>
-            {portfolio.name}
-          </span>
-          <div className="flex gap-4">
-            {navSections.map((s) => (
-              <a
-                key={s._id}
-                href={`#${s.type}`}
-                className="text-xs font-medium capitalize transition-colors hover:opacity-80"
-                style={{ color: cs.text, opacity: 0.6 }}
-              >
-                {s.type}
-              </a>
-            ))}
+      {/* Sticky nav — hidden in editor */}
+      {!editorProps && (
+        <nav
+          className="fixed top-0 left-0 right-0 z-50 transition-transform duration-300"
+          style={{
+            transform: showNav ? 'translateY(0)' : 'translateY(-100%)',
+            backgroundColor: isDark ? `${cs.background}ee` : '#ffffffee',
+            backdropFilter: 'blur(12px)',
+            borderBottom: `1px solid ${isDark ? cs.text + '10' : 'rgba(0,0,0,0.06)'}`,
+          }}
+        >
+          <div className="max-w-4xl mx-auto px-6 py-3 flex items-center justify-between">
+            <span className="font-semibold text-sm" style={{ color: cs.text, fontFamily: fonts.heading }}>
+              {portfolio.name}
+            </span>
+            <div className="flex gap-4">
+              {navSections.map((s) => (
+                <a
+                  key={s._id}
+                  href={`#${s.type}`}
+                  className="text-xs font-medium capitalize transition-colors hover:opacity-80"
+                  style={{ color: cs.text, opacity: 0.6 }}
+                >
+                  {s.type}
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      )}
 
       {/* Card container */}
       <div className="max-w-4xl mx-auto" style={{ maxWidth: '56rem' }}>
@@ -312,27 +317,32 @@ export default function StandardLayout({ portfolio }) {
             const isHero = section.type === 'hero';
             const isContact = section.type === 'contact';
 
+            let sectionEl;
             if (isContact) {
-              return (
-                <section key={section._id} id={section.type} className={spacing}>
+              sectionEl = (
+                <section key={SectionWrap ? undefined : section._id} id={section.type} className={spacing}>
                   <ContactSection content={section.content || {}} theme={theme} slug={portfolio.slug} />
+                </section>
+              );
+            } else {
+              const Renderer = sectionRenderers[section.type];
+              if (!Renderer) return null;
+
+              sectionEl = (
+                <section key={SectionWrap ? undefined : section._id} id={section.type} className={isHero ? '' : spacing}>
+                  <Renderer
+                    content={section.content || {}}
+                    cs={cs}
+                    fonts={fonts}
+                    isDark={isDark}
+                  />
                 </section>
               );
             }
 
-            const Renderer = sectionRenderers[section.type];
-            if (!Renderer) return null;
-
-            return (
-              <section key={section._id} id={section.type} className={isHero ? '' : spacing}>
-                <Renderer
-                  content={section.content || {}}
-                  cs={cs}
-                  fonts={fonts}
-                  isDark={isDark}
-                />
-              </section>
-            );
+            return SectionWrap
+              ? <SectionWrap key={section._id} section={section}>{sectionEl}</SectionWrap>
+              : sectionEl;
           })}
         </div>
       </div>

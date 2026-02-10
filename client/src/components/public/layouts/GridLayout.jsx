@@ -270,15 +270,23 @@ const renderers = {
 
 /* ── Main Layout ─────────────────────────────────────────────────────── */
 
-export default function GridLayout({ portfolio }) {
+export default function GridLayout({ portfolio, editorProps }) {
   const theme = portfolio.theme || {};
   const cs = theme.colorScheme || {};
   const fonts = parseFontPairing(theme.fontPairing);
   useGoogleFonts(theme.fontPairing);
+  const SectionWrap = editorProps?.SectionWrapper;
 
-  const visible = [...(portfolio.sections || [])].filter((s) => s.visible).sort((a, b) => a.order - b.order);
+  const allSorted = [...(portfolio.sections || [])].sort((a, b) => a.order - b.order);
+  const visible = editorProps?.showHidden
+    ? allSorted
+    : allSorted.filter((s) => s.visible);
   const navSections = visible.filter((s) => s.type !== 'hero');
   const heroSection = visible.find((s) => s.type === 'hero');
+
+  const heroEl = heroSection
+    ? <Hero content={heroSection.content || {}} cs={cs} fonts={fonts} />
+    : null;
 
   return (
     <div style={{ backgroundColor: cs.background, color: cs.text, fontFamily: fonts.body, minHeight: '100vh' }}>
@@ -311,13 +319,16 @@ export default function GridLayout({ portfolio }) {
       )}
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      {heroSection && <Hero content={heroSection.content || {}} cs={cs} fonts={fonts} />}
+      {heroEl && (SectionWrap
+        ? <SectionWrap section={heroSection}>{heroEl}</SectionWrap>
+        : heroEl
+      )}
 
       {/* ── Body Sections ────────────────────────────────────────────── */}
       {navSections.map((section) => {
         const Renderer = section.type === 'contact' ? null : renderers[section.type];
-        return (
-          <section key={section._id} id={section.type} style={{ borderTop: border(cs) }}>
+        const sectionEl = (
+          <section key={SectionWrap ? undefined : section._id} id={section.type} style={{ borderTop: border(cs) }}>
             <div className="px-6 md:px-10 py-3" style={{ borderBottom: border(cs) }}>
               <h2 className="text-xs font-bold tracking-[0.2em]"
                 style={{ fontFamily: fonts.heading, color: cs.text, textTransform: 'uppercase' }}>
@@ -332,6 +343,10 @@ export default function GridLayout({ portfolio }) {
             ) : null}
           </section>
         );
+
+        return SectionWrap
+          ? <SectionWrap key={section._id} section={section}>{sectionEl}</SectionWrap>
+          : sectionEl;
       })}
 
       {/* ── Footer ───────────────────────────────────────────────────── */}

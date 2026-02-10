@@ -451,18 +451,20 @@ const sectionRenderers = {
 
 /* ── Main Layout ─────────────────────────────────────────────────────── */
 
-export default function ShowcaseLayout({ portfolio }) {
+export default function ShowcaseLayout({ portfolio, editorProps }) {
   const theme = portfolio.theme || {};
   const cs = theme.colorScheme || {};
   const isDark = theme.mode === 'dark';
   const fonts = parseFontPairing(theme.fontPairing);
   const sp = spacingMap[theme.spacing] || spacingMap.normal;
+  const SectionWrap = editorProps?.SectionWrapper;
 
   useGoogleFonts(theme.fontPairing);
 
-  const visibleSections = [...(portfolio.sections || [])]
-    .filter((s) => s.visible)
-    .sort((a, b) => a.order - b.order);
+  const allSorted = [...(portfolio.sections || [])].sort((a, b) => a.order - b.order);
+  const visibleSections = editorProps?.showHidden
+    ? allSorted
+    : allSorted.filter((s) => s.visible);
 
   return (
     <div
@@ -477,10 +479,11 @@ export default function ShowcaseLayout({ portfolio }) {
         const isHero = section.type === 'hero';
         const isContact = section.type === 'contact';
 
+        let sectionEl;
         if (isContact) {
-          return (
+          sectionEl = (
             <section
-              key={section._id}
+              key={SectionWrap ? undefined : section._id}
               id={section.type}
               className={`${sp.py} ${sp.px}`}
             >
@@ -498,26 +501,30 @@ export default function ShowcaseLayout({ portfolio }) {
               </div>
             </section>
           );
+        } else {
+          const Renderer = sectionRenderers[section.type];
+          if (!Renderer) return null;
+
+          sectionEl = (
+            <section
+              key={SectionWrap ? undefined : section._id}
+              id={section.type}
+              className={isHero ? '' : `${sp.py} ${sp.px}`}
+            >
+              {isHero ? (
+                <Renderer content={section.content || {}} cs={cs} fonts={fonts} isDark={isDark} />
+              ) : (
+                <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
+                  <Renderer content={section.content || {}} cs={cs} fonts={fonts} isDark={isDark} />
+                </div>
+              )}
+            </section>
+          );
         }
 
-        const Renderer = sectionRenderers[section.type];
-        if (!Renderer) return null;
-
-        return (
-          <section
-            key={section._id}
-            id={section.type}
-            className={isHero ? '' : `${sp.py} ${sp.px}`}
-          >
-            {isHero ? (
-              <Renderer content={section.content || {}} cs={cs} fonts={fonts} isDark={isDark} />
-            ) : (
-              <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
-                <Renderer content={section.content || {}} cs={cs} fonts={fonts} isDark={isDark} />
-              </div>
-            )}
-          </section>
-        );
+        return SectionWrap
+          ? <SectionWrap key={section._id} section={section}>{sectionEl}</SectionWrap>
+          : sectionEl;
       })}
     </div>
   );

@@ -267,18 +267,20 @@ const renderers = {
 
 /* ── Main Layout ─────────────────────────────────────────────────── */
 
-export default function SidebarLayout({ portfolio }) {
+export default function SidebarLayout({ portfolio, editorProps }) {
   const theme = portfolio.theme || {};
   const cs = theme.colorScheme || {};
   const fonts = useGoogleFonts(theme.fontPairing);
   const spacing = spacingMap[theme.spacing] || spacingMap.normal;
+  const SectionWrap = editorProps?.SectionWrapper;
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
 
-  const visibleSections = [...(portfolio.sections || [])]
-    .filter((s) => s.visible)
-    .sort((a, b) => a.order - b.order);
+  const allSorted = [...(portfolio.sections || [])].sort((a, b) => a.order - b.order);
+  const visibleSections = editorProps?.showHidden
+    ? allSorted
+    : allSorted.filter((s) => s.visible);
 
   const heroSection = visibleSections.find((s) => s.type === 'hero');
   const heroContent = heroSection?.content || {};
@@ -286,8 +288,9 @@ export default function SidebarLayout({ portfolio }) {
   const contactSection = visibleSections.find((s) => s.type === 'contact');
   const contactContent = contactSection?.content || {};
 
-  // Track active section on scroll
+  // Track active section on scroll (disabled in editor)
   useEffect(() => {
+    if (editorProps) return;
     const handleScroll = () => {
       const offsets = contentSections.map((s) => {
         const el = document.getElementById(s.type);
@@ -303,7 +306,7 @@ export default function SidebarLayout({ portfolio }) {
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [contentSections.length]);
+  }, [contentSections.length, editorProps]);
 
   const scrollTo = (sectionType) => {
     const el = document.getElementById(sectionType);
@@ -331,27 +334,34 @@ export default function SidebarLayout({ portfolio }) {
       >
         <div className="flex-1 flex flex-col px-6 py-8 overflow-y-auto">
           {/* Profile */}
-          <div className="mb-8">
-            {heroContent.profileImage && (
-              <img
-                src={heroContent.profileImage}
-                alt={heroContent.name || portfolio.name}
-                className="w-20 h-20 rounded-full object-cover mb-4 border-2"
-                style={{ borderColor: cs.primary }}
-              />
-            )}
-            <h1
-              className="text-xl font-bold leading-tight"
-              style={{ fontFamily: fonts.heading, color: cs.text }}
-            >
-              {heroContent.name || portfolio.name || 'Portfolio'}
-            </h1>
-            {heroContent.tagline && (
-              <p className="text-sm mt-1 font-medium" style={{ color: cs.primary }}>
-                {heroContent.tagline}
-              </p>
-            )}
-          </div>
+          {(() => {
+            const profileEl = (
+              <div className="mb-8">
+                {heroContent.profileImage && (
+                  <img
+                    src={heroContent.profileImage}
+                    alt={heroContent.name || portfolio.name}
+                    className="w-20 h-20 rounded-full object-cover mb-4 border-2"
+                    style={{ borderColor: cs.primary }}
+                  />
+                )}
+                <h1
+                  className="text-xl font-bold leading-tight"
+                  style={{ fontFamily: fonts.heading, color: cs.text }}
+                >
+                  {heroContent.name || portfolio.name || 'Portfolio'}
+                </h1>
+                {heroContent.tagline && (
+                  <p className="text-sm mt-1 font-medium" style={{ color: cs.primary }}>
+                    {heroContent.tagline}
+                  </p>
+                )}
+              </div>
+            );
+            return SectionWrap && heroSection
+              ? <SectionWrap section={heroSection}>{profileEl}</SectionWrap>
+              : profileEl;
+          })()}
 
           {/* Navigation */}
           <nav className="flex-1">
@@ -492,9 +502,10 @@ export default function SidebarLayout({ portfolio }) {
           {/* Content Sections */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.gap }}>
             {contentSections.map((section) => {
+              let sectionEl;
               if (section.type === 'contact') {
-                return (
-                  <section key={section._id} id={section.type} style={{ paddingTop: spacing.py }}>
+                sectionEl = (
+                  <section key={SectionWrap ? undefined : section._id} id={section.type} style={{ paddingTop: spacing.py }}>
                     <h2
                       className="text-2xl font-bold mb-6"
                       style={{ fontFamily: fonts.heading, color: cs.text }}
@@ -508,20 +519,24 @@ export default function SidebarLayout({ portfolio }) {
                     />
                   </section>
                 );
+              } else {
+                const Renderer = renderers[section.type];
+                if (!Renderer) return null;
+
+                sectionEl = (
+                  <section key={SectionWrap ? undefined : section._id} id={section.type} style={{ paddingTop: spacing.py }}>
+                    <Renderer
+                      content={section.content || {}}
+                      theme={theme}
+                      fonts={fonts}
+                    />
+                  </section>
+                );
               }
 
-              const Renderer = renderers[section.type];
-              if (!Renderer) return null;
-
-              return (
-                <section key={section._id} id={section.type} style={{ paddingTop: spacing.py }}>
-                  <Renderer
-                    content={section.content || {}}
-                    theme={theme}
-                    fonts={fonts}
-                  />
-                </section>
-              );
+              return SectionWrap
+                ? <SectionWrap key={section._id} section={section}>{sectionEl}</SectionWrap>
+                : sectionEl;
             })}
           </div>
         </div>

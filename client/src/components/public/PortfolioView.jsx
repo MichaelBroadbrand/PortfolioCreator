@@ -261,8 +261,8 @@ export const sectionRenderers = {
 
 // ─── Main component: dispatches to layout-specific renderer ───
 
-export default function PortfolioView({ portfolio }) {
+export default function PortfolioView({ portfolio, editorProps }) {
   const layoutName = portfolio.layout || 'standard';
   const Layout = layouts[layoutName] || StandardLayout;
-  return <Layout portfolio={portfolio} />;
+  return <Layout portfolio={portfolio} editorProps={editorProps} />;
 }
