@@ -69,6 +69,7 @@ async function createFromTemplate(req, res, next) {
       status: 'draft',
       sections,
       theme: { ...template.defaultTheme },
+      layout: template.layout || 'standard',
     });
 
     res.status(201).json({ success: true, data: portfolio });
@@ -217,6 +218,7 @@ async function duplicatePortfolio(req, res, next) {
       status: 'draft',
       sections: original.sections,
       theme: original.theme,
+      layout: original.layout || 'standard',
       seo: { title: '', description: '', ogImage: '' },
     });
 

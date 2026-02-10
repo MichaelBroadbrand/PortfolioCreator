@@ -1,0 +1,13 @@
+node_modules
+dist
+dist-ssr
+npm-debug.log*
+.DS_Store
+.env
+.env.example
+clientsecrets.env
+coverage/
+*.log
+*.local
+.vscode/
+.idea/

@@ -33,7 +33,7 @@ export default function PortfolioHeader({ portfolio }) {
           {visibleSections.slice(0, 6).map((s) => (
             <a
               key={s._id}
-              href={`#section-${s._id}`}
+              href={`#${s.type}`}
               className="text-xs font-medium hover:opacity-80 transition-opacity capitalize hidden md:block"
               style={{ color: colorScheme.primary }}
             >

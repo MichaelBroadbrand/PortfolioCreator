@@ -17,13 +17,13 @@ import { MAX_PORTFOLIOS_FREE } from '../utils/constants';
 
 function StatCard({ icon: Icon, label, value, color }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm p-5 flex items-center gap-4">
+    <div className="bg-white/[0.06] backdrop-blur-xl border border-white/[0.08] rounded-xl p-5 flex items-center gap-4 hover:border-white/[0.12] transition-colors">
       <div className={`w-12 h-12 rounded-full flex items-center justify-center ${color}`}>
         <Icon className="w-6 h-6" />
       </div>
       <div>
         <p className="text-3xl font-bold text-surface-900">{value}</p>
-        <p className="text-sm text-surface-500">{label}</p>
+        <p className="text-sm text-surface-600">{label}</p>
       </div>
     </div>
   );
@@ -100,19 +100,19 @@ export default function Dashboard() {
 
         {/* Stat cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <StatCard icon={Layers} label="Total Portfolios" value={portfolios.length} color="bg-brand-100 text-brand-600" />
-          <StatCard icon={Eye} label="Total Views" value={totalViews} color="bg-success-100 text-success-600" />
-          <StatCard icon={Globe} label="Published" value={publishedCount} color="bg-blue-100 text-blue-600" />
+          <StatCard icon={Layers} label="Total Portfolios" value={portfolios.length} color="bg-brand-500/10 text-brand-400" />
+          <StatCard icon={Eye} label="Total Views" value={totalViews} color="bg-success-500/10 text-success-500" />
+          <StatCard icon={Globe} label="Published" value={publishedCount} color="bg-blue-500/10 text-blue-400" />
         </div>
 
         {nearLimit && !atLimit && (
-          <div className="mb-4 bg-accent-50 border border-accent-200 rounded-lg px-4 py-3 flex items-center justify-between">
-            <p className="text-sm text-accent-700">
+          <div className="mb-4 bg-brand-500/10 border border-brand-500/20 rounded-lg px-4 py-3 flex items-center justify-between">
+            <p className="text-sm text-brand-400">
               You've used {portfolios.length} of {MAX_PORTFOLIOS_FREE} free portfolios. Upgrade for unlimited.
             </p>
             <button
               onClick={() => toast.info('Upgrade plans coming soon!')}
-              className="text-sm font-medium text-accent-700 hover:text-accent-800 underline"
+              className="text-sm font-medium text-brand-400 hover:text-brand-300 underline"
             >
               Upgrade
             </button>
@@ -129,12 +129,12 @@ export default function Dashboard() {
         {loading && <div className="py-16"><InlineLoader /></div>}
 
         {!loading && portfolios.length === 0 && (
-          <div className="text-center py-16 bg-white rounded-xl shadow-sm">
-            <div className="w-20 h-20 bg-surface-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <FileText className="w-10 h-10 text-surface-400" />
+          <div className="text-center py-16 bg-white/[0.06] backdrop-blur-xl border border-white/[0.08] rounded-xl">
+            <div className="w-20 h-20 bg-white/[0.06] rounded-full flex items-center justify-center mx-auto mb-4">
+              <FileText className="w-10 h-10 text-surface-500" />
             </div>
             <h3 className="text-xl font-semibold text-surface-900 mb-2">Create your first portfolio</h3>
-            <p className="text-surface-500 mb-6">Choose a template and start building in minutes</p>
+            <p className="text-surface-600 mb-6">Choose a template and start building in minutes</p>
             <Button onClick={() => navigate('/templates')}>Browse Templates</Button>
           </div>
         )}

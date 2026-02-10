@@ -50,7 +50,7 @@ export default function ImageUploadZone({
           alt="Uploaded"
           className={`w-full h-full object-cover ${isCircle ? 'rounded-full' : 'rounded-lg'}`}
         />
-        <div className={`absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 ${isCircle ? 'rounded-full' : 'rounded-lg'}`}>
+        <div className={`absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 ${isCircle ? 'rounded-full' : 'rounded-lg'}`}>
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
@@ -82,9 +82,9 @@ export default function ImageUploadZone({
   // Uploading — show progress
   if (uploading) {
     return (
-      <div className={`flex flex-col items-center justify-center border-2 border-brand-400 bg-brand-50 ${baseClasses} ${className}`} style={!isCircle ? { aspectRatio } : undefined}>
-        <p className="text-sm text-brand-600 mb-2">Uploading...</p>
-        <div className="w-3/4 h-1.5 bg-brand-100 rounded-full overflow-hidden">
+      <div className={`flex flex-col items-center justify-center border-2 border-brand-500/40 bg-brand-500/5 ${baseClasses} ${className}`} style={!isCircle ? { aspectRatio } : undefined}>
+        <p className="text-sm text-brand-400 mb-2">Uploading...</p>
+        <div className="w-3/4 h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
           <div
             className="h-full bg-brand-500 rounded-full transition-all duration-300"
             style={{ width: `${progress}%` }}
@@ -99,13 +99,13 @@ export default function ImageUploadZone({
   if (error) {
     return (
       <div
-        className={`flex flex-col items-center justify-center border-2 border-dashed border-error-300 bg-error-50 cursor-pointer ${baseClasses} ${className}`}
+        className={`flex flex-col items-center justify-center border-2 border-dashed border-error-500/40 bg-error-500/5 cursor-pointer ${baseClasses} ${className}`}
         style={!isCircle ? { aspectRatio } : undefined}
         onClick={() => { reset(); inputRef.current?.click(); }}
       >
-        <RefreshCw className="w-6 h-6 text-error-400 mb-1" />
-        <p className="text-sm text-error-600">Upload failed</p>
-        <p className="text-xs text-error-400">Click to retry</p>
+        <RefreshCw className="w-6 h-6 text-error-500 mb-1" />
+        <p className="text-sm text-error-500">Upload failed</p>
+        <p className="text-xs text-error-500/60">Click to retry</p>
         <input
           ref={inputRef}
           type="file"
@@ -121,7 +121,7 @@ export default function ImageUploadZone({
   return (
     <div
       className={`flex flex-col items-center justify-center border-2 border-dashed cursor-pointer transition-colors ${
-        dragOver ? 'border-brand-500 bg-brand-50' : 'border-surface-300 hover:border-brand-400'
+        dragOver ? 'border-brand-500 bg-brand-500/10' : 'border-surface-400 hover:border-brand-500/50'
       } ${baseClasses} ${className}`}
       style={!isCircle ? { aspectRatio } : undefined}
       onClick={() => inputRef.current?.click()}
@@ -129,11 +129,11 @@ export default function ImageUploadZone({
       onDragLeave={() => setDragOver(false)}
       onDrop={handleDrop}
     >
-      <CloudUpload className={`w-6 h-6 ${dragOver ? 'text-brand-500' : 'text-surface-400'} mb-1`} />
-      <p className={`text-sm ${dragOver ? 'text-brand-600' : 'text-surface-500'}`}>
+      <CloudUpload className={`w-6 h-6 ${dragOver ? 'text-brand-500' : 'text-surface-500'} mb-1`} />
+      <p className={`text-sm ${dragOver ? 'text-brand-400' : 'text-surface-600'}`}>
         {dragOver ? 'Drop to upload' : 'Drag & drop or click to upload'}
       </p>
-      <p className="text-xs text-surface-400 mt-1">Max 5MB &middot; JPG, PNG, WebP, GIF</p>
+      <p className="text-xs text-surface-500 mt-1">Max 5MB &middot; JPG, PNG, WebP, GIF</p>
       <input
         ref={inputRef}
         type="file"

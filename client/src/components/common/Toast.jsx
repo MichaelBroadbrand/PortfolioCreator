@@ -7,10 +7,10 @@ const icons = {
   info: Info,
 };
 
-const colors = {
-  success: 'bg-success-50 text-success-700 border-success-200',
-  error: 'bg-error-50 text-error-700 border-error-200',
-  info: 'bg-brand-50 text-brand-700 border-brand-200',
+const iconColors = {
+  success: 'text-success-500',
+  error: 'text-error-500',
+  info: 'text-brand-400',
 };
 
 const progressColors = {
@@ -45,16 +45,16 @@ function ToastItem({ toast, onRemove }) {
   return (
     <div
       className={`
-        relative flex items-center gap-3 px-4 py-3 rounded-xl border shadow-lg
+        relative flex items-center gap-3 px-4 py-3 rounded-xl
+        bg-surface-100 border border-white/[0.1] shadow-lg
         animate-in slide-in-from-right duration-300
-        ${colors[toast.type] || colors.info}
       `}
     >
-      <Icon className="w-5 h-5 shrink-0" />
-      <p className="text-sm font-medium flex-1">{toast.message}</p>
+      <Icon className={`w-5 h-5 shrink-0 ${iconColors[toast.type] || iconColors.info}`} />
+      <p className="text-sm font-medium flex-1 text-surface-800">{toast.message}</p>
       <button
         onClick={() => onRemove(toast.id)}
-        className="p-0.5 rounded hover:bg-black/5 transition-colors"
+        className="p-0.5 rounded text-surface-500 hover:text-surface-700 hover:bg-white/[0.06] transition-colors"
       >
         <X className="w-4 h-4" />
       </button>

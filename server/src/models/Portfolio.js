@@ -54,6 +54,11 @@ const portfolioSchema = new mongoose.Schema(
       mode: { type: String, enum: ['light', 'dark'], default: 'light' },
       spacing: { type: String, enum: ['compact', 'normal', 'spacious'], default: 'normal' },
     },
+    layout: {
+      type: String,
+      enum: ['sidebar', 'immersive', 'split', 'standard', 'grid', 'showcase'],
+      default: 'standard',
+    },
     seo: {
       title: { type: String, default: '' },
       description: { type: String, default: '' },

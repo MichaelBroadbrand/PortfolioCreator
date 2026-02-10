@@ -1,0 +1,17 @@
+node_modules
+.git
+.gitignore
+*.md
+.DS_Store
+.claude/
+.vscode/
+.idea/
+coverage/
+*.log
+*.env
+*.env.local
+*.env.*.local
+serversecrets.env
+clientsecrets.env
+tmp/
+temp/

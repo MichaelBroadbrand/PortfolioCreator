@@ -89,13 +89,13 @@ function SortableItem({ section }) {
       className={`
         flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm cursor-pointer
         transition-colors duration-150
-        ${isSelected ? 'bg-brand-50 text-brand-700' : 'hover:bg-surface-100 text-surface-700'}
+        ${isSelected ? 'bg-white/[0.08] text-brand-400' : 'hover:bg-white/[0.04] text-surface-700'}
         ${!section.visible ? 'opacity-50' : ''}
       `}
       onClick={() => selectSection(section._id)}
     >
       <button
-        className="cursor-grab active:cursor-grabbing text-surface-400 hover:text-surface-600"
+        className="cursor-grab active:cursor-grabbing text-surface-500 hover:text-surface-700"
         {...attributes}
         {...listeners}
       >
@@ -110,7 +110,7 @@ function SortableItem({ section }) {
           e.stopPropagation();
           toggleSectionVisibility(section._id);
         }}
-        className="p-0.5 hover:bg-surface-200 rounded text-surface-400"
+        className="p-0.5 hover:bg-white/[0.06] rounded text-surface-500"
         title={section.visible ? 'Hide section' : 'Show section'}
       >
         {section.visible ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
@@ -122,7 +122,7 @@ function SortableItem({ section }) {
             e.stopPropagation();
             removeSection(section._id);
           }}
-          className="p-0.5 hover:bg-red-100 rounded text-surface-300 hover:text-red-500"
+          className="p-0.5 hover:bg-error-500/10 rounded text-surface-400 hover:text-error-500"
           title="Remove section"
         >
           <Trash2 className="w-3.5 h-3.5" />
@@ -165,14 +165,14 @@ export default function SectionToolbar() {
 
   if (sidebarCollapsed) {
     return (
-      <div className="w-16 bg-surface-50 border-r flex flex-col items-center py-4 gap-3 shrink-0">
-        <button onClick={toggleSidebar} className="p-2 hover:bg-surface-200 rounded-lg">
+      <div className="w-16 bg-surface-100 border-r border-white/[0.06] flex flex-col items-center py-4 gap-3 shrink-0">
+        <button onClick={toggleSidebar} className="p-2 hover:bg-white/[0.06] rounded-lg text-surface-600">
           <ChevronRight className="w-4 h-4" />
         </button>
         {sections.map((s) => {
           const Icon = sectionIcons[s.type] || FileText;
           return (
-            <div key={s._id} className="p-2 rounded-lg hover:bg-surface-200 text-surface-500" title={sectionLabels[s.type]}>
+            <div key={s._id} className="p-2 rounded-lg hover:bg-white/[0.06] text-surface-500" title={sectionLabels[s.type]}>
               <Icon className="w-4 h-4" />
             </div>
           );
@@ -182,13 +182,13 @@ export default function SectionToolbar() {
   }
 
   return (
-    <div className="w-64 bg-surface-50 border-r flex flex-col shrink-0 overflow-hidden">
+    <div className="w-64 bg-surface-100 border-r border-white/[0.06] flex flex-col shrink-0 overflow-hidden">
       {/* Tab header */}
-      <div className="flex items-center border-b">
+      <div className="flex items-center border-b border-white/[0.06]">
         <button
           onClick={() => setSidebarTab('sections')}
           className={`flex-1 py-3 text-sm font-medium text-center transition-colors ${
-            sidebarTab === 'sections' ? 'text-brand-600 border-b-2 border-brand-500' : 'text-surface-500 hover:text-surface-700'
+            sidebarTab === 'sections' ? 'text-brand-400 border-b-2 border-brand-400' : 'text-surface-500 hover:text-surface-700'
           }`}
         >
           Sections
@@ -196,12 +196,12 @@ export default function SectionToolbar() {
         <button
           onClick={() => setSidebarTab('theme')}
           className={`flex-1 py-3 text-sm font-medium text-center transition-colors ${
-            sidebarTab === 'theme' ? 'text-brand-600 border-b-2 border-brand-500' : 'text-surface-500 hover:text-surface-700'
+            sidebarTab === 'theme' ? 'text-brand-400 border-b-2 border-brand-400' : 'text-surface-500 hover:text-surface-700'
           }`}
         >
           Theme
         </button>
-        <button onClick={toggleSidebar} className="px-2 text-surface-400 hover:text-surface-600">
+        <button onClick={toggleSidebar} className="px-2 text-surface-500 hover:text-surface-700">
           <ChevronLeft className="w-4 h-4" />
         </button>
       </div>
@@ -234,7 +234,7 @@ export default function SectionToolbar() {
                     <button
                       key={type}
                       onClick={() => addSection(type, defaultContentMap[type])}
-                      className="flex flex-col items-center gap-1 p-2 rounded-lg border border-dashed border-surface-300 hover:border-brand-400 hover:bg-brand-50 text-surface-500 hover:text-brand-600 transition-colors"
+                      className="flex flex-col items-center gap-1 p-2 rounded-lg border border-dashed border-white/[0.1] hover:border-brand-500/50 hover:bg-brand-500/5 text-surface-500 hover:text-brand-400 transition-colors"
                       title={`Add ${sectionLabels[type]}`}
                     >
                       <Icon className="w-4 h-4" />

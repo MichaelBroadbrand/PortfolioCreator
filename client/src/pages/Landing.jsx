@@ -88,19 +88,23 @@ export default function Landing() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 relative overflow-hidden">
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <svg className="w-full h-full" viewBox="0 0 1200 800">
-            <circle cx="200" cy="200" r="150" fill="white" />
-            <circle cx="1000" cy="600" r="200" fill="white" />
-            <circle cx="600" cy="100" r="80" fill="white" />
-          </svg>
-        </div>
+      <section className="min-h-screen flex items-center bg-surface-50 relative overflow-hidden">
+        {/* Ambient glow */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at 50% 0%, rgba(234,179,8,0.08) 0%, transparent 60%)',
+          }}
+        />
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+        }} />
 
         <div className="max-w-7xl mx-auto px-4 py-20 text-center relative z-10">
           <h1
-            className="text-4xl md:text-6xl font-bold leading-tight text-white mb-6 font-heading opacity-0 translate-y-4 transition-all duration-700"
+            className="text-4xl md:text-6xl font-bold leading-tight mb-6 font-heading bg-gradient-to-r from-surface-900 via-brand-300 to-brand-500 bg-clip-text text-transparent opacity-0 translate-y-4 transition-all duration-700"
             data-reveal
           >
             Build a Stunning Portfolio
@@ -108,7 +112,7 @@ export default function Landing() {
             in Minutes
           </h1>
           <p
-            className="text-lg md:text-xl text-brand-200 max-w-2xl mx-auto mb-10 opacity-0 translate-y-4 transition-all duration-700 delay-100"
+            className="text-lg md:text-xl text-surface-600 max-w-2xl mx-auto mb-10 opacity-0 translate-y-4 transition-all duration-700 delay-100"
             data-reveal
           >
             No design skills needed. Choose a template, add your content, and
@@ -120,17 +124,18 @@ export default function Landing() {
           >
             <Link to="/sign-up">
               <Button
+                variant="gold"
                 size="lg"
-                className="bg-white text-brand-700 hover:bg-brand-50 px-8 py-3.5 text-base font-semibold"
+                className="px-8 py-3.5 text-base font-semibold"
               >
                 Get Started Free
               </Button>
             </Link>
             <Link to="/templates">
               <Button
-                variant="ghost"
+                variant="outline-white"
                 size="lg"
-                className="border-2 border-white/30 text-white hover:bg-white/10 px-8 py-3.5 text-base"
+                className="px-8 py-3.5 text-base"
               >
                 See Templates
               </Button>
@@ -142,28 +147,28 @@ export default function Landing() {
             className="max-w-4xl mx-auto animate-float opacity-0 translate-y-4 transition-all duration-700 delay-300"
             data-reveal
           >
-            <div className="bg-white rounded-xl shadow-2xl overflow-hidden transform perspective-1000 rotate-x-2">
+            <div className="bg-white/[0.06] backdrop-blur-xl border border-white/[0.08] rounded-xl shadow-2xl overflow-hidden">
               {/* Browser chrome */}
-              <div className="bg-surface-100 px-4 py-3 flex items-center gap-2 border-b">
+              <div className="bg-white/[0.04] px-4 py-3 flex items-center gap-2 border-b border-white/[0.06]">
                 <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-red-400" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                  <div className="w-3 h-3 rounded-full bg-green-400" />
+                  <div className="w-3 h-3 rounded-full bg-red-400/60" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-400/60" />
+                  <div className="w-3 h-3 rounded-full bg-green-400/60" />
                 </div>
-                <div className="flex-1 bg-white rounded-md px-3 py-1 text-xs text-surface-400 text-center">
+                <div className="flex-1 bg-white/[0.06] rounded-md px-3 py-1 text-xs text-surface-500 text-center">
                   portfoliobuilder.com/alexchen
                 </div>
               </div>
               {/* Mock portfolio content */}
-              <div className="p-8 bg-gradient-to-br from-slate-900 to-slate-800">
+              <div className="p-8 bg-gradient-to-br from-surface-200 to-surface-100">
                 <div className="max-w-md">
-                  <div className="w-16 h-16 rounded-full bg-emerald-500/20 mb-4" />
-                  <div className="h-8 bg-white/90 rounded w-48 mb-3" />
-                  <div className="h-4 bg-emerald-400/60 rounded w-64 mb-2" />
-                  <div className="h-3 bg-white/30 rounded w-80 mb-6" />
+                  <div className="w-16 h-16 rounded-full bg-brand-500/20 mb-4" />
+                  <div className="h-8 bg-surface-800/90 rounded w-48 mb-3" />
+                  <div className="h-4 bg-brand-500/40 rounded w-64 mb-2" />
+                  <div className="h-3 bg-surface-800/20 rounded w-80 mb-6" />
                   <div className="flex gap-3">
-                    <div className="h-9 bg-emerald-500 rounded-lg w-28" />
-                    <div className="h-9 bg-white/10 rounded-lg w-28 border border-white/20" />
+                    <div className="h-9 bg-brand-500 rounded-lg w-28" />
+                    <div className="h-9 bg-white/[0.06] rounded-lg w-28 border border-white/[0.1]" />
                   </div>
                 </div>
               </div>
@@ -173,7 +178,7 @@ export default function Landing() {
       </section>
 
       {/* Social Proof Bar */}
-      <section className="py-4 bg-white border-b border-surface-100">
+      <section className="py-4 bg-surface-100 border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-2 text-surface-500">
             <Users className="w-4 h-4" />
@@ -185,13 +190,13 @@ export default function Landing() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-white scroll-mt-20">
+      <section id="features" className="py-20 bg-surface-50 scroll-mt-20">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-16" data-reveal>
             <h2 className="text-3xl font-bold text-surface-900 mb-4 font-heading opacity-0 translate-y-4 transition-all duration-700" data-reveal>
               Everything You Need
             </h2>
-            <p className="text-surface-500 text-lg opacity-0 translate-y-4 transition-all duration-700 delay-100" data-reveal>
+            <p className="text-surface-600 text-lg opacity-0 translate-y-4 transition-all duration-700 delay-100" data-reveal>
               Build, customise, and share — all in one place.
             </p>
           </div>
@@ -200,15 +205,15 @@ export default function Landing() {
             {features.map(({ icon: Icon, title, desc }, i) => (
               <div
                 key={title}
-                className="text-center opacity-0 translate-y-4 transition-all duration-700"
+                className="text-center bg-white/[0.06] backdrop-blur-xl border border-white/[0.08] rounded-xl p-6 hover:border-white/[0.12] hover:shadow-[0_0_30px_rgba(234,179,8,0.08)] transition-all duration-300 opacity-0 translate-y-4"
                 style={{ transitionDelay: `${i * 100}ms` }}
                 data-reveal
               >
-                <div className="w-12 h-12 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center mx-auto mb-4">
+                <div className="w-12 h-12 rounded-xl bg-brand-500/10 text-brand-400 flex items-center justify-center mx-auto mb-4">
                   <Icon className="w-6 h-6" />
                 </div>
                 <h3 className="font-semibold text-surface-900 mb-2">{title}</h3>
-                <p className="text-sm text-surface-500 leading-relaxed">{desc}</p>
+                <p className="text-sm text-surface-600 leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
@@ -216,7 +221,7 @@ export default function Landing() {
       </section>
 
       {/* Template Showcase */}
-      <section className="py-20 bg-gray-50 scroll-mt-20">
+      <section className="py-20 bg-surface-100 scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2
@@ -225,7 +230,7 @@ export default function Landing() {
             >
               Choose Your Style
             </h2>
-            <p className="text-surface-500 text-lg opacity-0 translate-y-4 transition-all duration-700 delay-100" data-reveal>
+            <p className="text-surface-600 text-lg opacity-0 translate-y-4 transition-all duration-700 delay-100" data-reveal>
               Start with a professional template and make it yours.
             </p>
           </div>
@@ -242,14 +247,14 @@ export default function Landing() {
             ].map(({ name, gradient, accent }, i) => (
               <div
                 key={name}
-                className={`rounded-xl shadow-xl overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 ${i === 1 ? 'md:-translate-y-4' : ''}`}
+                className={`rounded-xl overflow-hidden bg-white/[0.06] backdrop-blur-xl border border-white/[0.08] hover:border-white/[0.12] hover:shadow-[0_0_30px_rgba(234,179,8,0.08)] transform hover:-translate-y-2 transition-all duration-300 ${i === 1 ? 'md:-translate-y-4' : ''}`}
               >
                 <div className={`h-48 bg-gradient-to-br ${gradient} p-6`}>
                   <div className={`w-8 h-8 rounded-full ${accent} opacity-60 mb-3`} />
                   <div className={`h-5 rounded w-32 mb-2 ${name === 'Designer' ? 'bg-stone-900/80' : 'bg-white/80'}`} />
                   <div className={`h-3 rounded w-48 ${name === 'Designer' ? 'bg-stone-900/40' : 'bg-white/40'}`} />
                 </div>
-                <div className="bg-white p-4">
+                <div className="bg-surface-100 p-4">
                   <p className="font-semibold text-surface-900">{name}</p>
                 </div>
               </div>
@@ -259,7 +264,7 @@ export default function Landing() {
           <div className="text-center">
             <Link
               to="/templates"
-              className="inline-flex items-center gap-1 text-brand-600 hover:text-brand-700 font-medium text-sm"
+              className="inline-flex items-center gap-1 text-brand-400 hover:text-brand-300 font-medium text-sm"
             >
               Browse All Templates <ArrowRight className="w-4 h-4" />
             </Link>
@@ -268,7 +273,7 @@ export default function Landing() {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 bg-white scroll-mt-20">
+      <section className="py-20 bg-surface-50 scroll-mt-20">
         <div className="max-w-4xl mx-auto px-4">
           <h2
             className="text-3xl font-bold text-surface-900 mb-16 font-heading text-center opacity-0 translate-y-4 transition-all duration-700"
@@ -285,15 +290,15 @@ export default function Landing() {
               <div key={num} className="flex-1 flex flex-col items-center text-center relative">
                 {/* Connector line (desktop) */}
                 {i < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-6 left-[calc(50%+32px)] w-[calc(100%-64px)] border-t-2 border-dashed border-surface-300" />
+                  <div className="hidden md:block absolute top-6 left-[calc(50%+32px)] w-[calc(100%-64px)] border-t-2 border-dashed border-white/[0.1]" />
                 )}
 
-                <div className="w-12 h-12 rounded-full bg-brand-600 text-white flex items-center justify-center text-lg font-bold mb-4 relative z-10">
+                <div className="w-12 h-12 rounded-full bg-brand-500 text-surface-50 flex items-center justify-center text-lg font-bold mb-4 relative z-10">
                   {num}
                 </div>
-                <Icon className="w-6 h-6 text-brand-500 mb-3" />
+                <Icon className="w-6 h-6 text-brand-400 mb-3" />
                 <h3 className="font-semibold text-surface-900 mb-2">{title}</h3>
-                <p className="text-sm text-surface-500 max-w-xs">{desc}</p>
+                <p className="text-sm text-surface-600 max-w-xs">{desc}</p>
               </div>
             ))}
           </div>
@@ -301,22 +306,23 @@ export default function Landing() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 scroll-mt-20">
+      <section className="py-20 bg-surface-50 scroll-mt-20">
         <div className="max-w-4xl mx-auto px-4">
           <div
-            className="bg-gradient-to-r from-brand-500 to-accent-500 rounded-2xl p-12 text-center opacity-0 translate-y-4 transition-all duration-700"
+            className="bg-white/[0.06] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-12 text-center hover:border-white/[0.12] hover:shadow-[0_0_40px_rgba(234,179,8,0.06)] transition-all duration-500 opacity-0 translate-y-4 transition-all duration-700"
             data-reveal
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 font-heading">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 font-heading bg-gradient-to-r from-surface-900 via-brand-300 to-brand-500 bg-clip-text text-transparent">
               Ready to Build Your Portfolio?
             </h2>
-            <p className="text-white/80 text-lg mb-8 max-w-xl mx-auto">
+            <p className="text-surface-600 text-lg mb-8 max-w-xl mx-auto">
               Join thousands of professionals showcasing their work.
             </p>
             <Link to="/sign-up">
               <Button
+                variant="gold"
                 size="lg"
-                className="bg-white text-brand-700 hover:bg-brand-50 px-8 py-3.5 text-base font-semibold"
+                className="px-8 py-3.5 text-base font-semibold"
               >
                 Get Started Free
               </Button>

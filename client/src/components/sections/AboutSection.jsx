@@ -41,11 +41,11 @@ export default function AboutSection({ content, onUpdate }) {
       {/* Bio with rich text toolbar */}
       <div>
         <label className="block text-sm font-medium text-surface-700 mb-1">Bio</label>
-        <div className="flex items-center gap-1 mb-1 border border-surface-200 rounded-t-lg px-2 py-1 bg-surface-50">
+        <div className="flex items-center gap-1 mb-1 border border-white/[0.08] rounded-t-lg px-2 py-1 bg-white/[0.04]">
           <button
             type="button"
             onClick={() => applyFormat('bold')}
-            className="p-1 rounded hover:bg-surface-200 text-surface-600"
+            className="p-1 rounded hover:bg-white/[0.06] text-surface-600"
             title="Bold"
           >
             <Bold className="w-4 h-4" />
@@ -53,7 +53,7 @@ export default function AboutSection({ content, onUpdate }) {
           <button
             type="button"
             onClick={() => applyFormat('italic')}
-            className="p-1 rounded hover:bg-surface-200 text-surface-600"
+            className="p-1 rounded hover:bg-white/[0.06] text-surface-600"
             title="Italic"
           >
             <Italic className="w-4 h-4" />
@@ -61,7 +61,7 @@ export default function AboutSection({ content, onUpdate }) {
           <button
             type="button"
             onClick={() => applyFormat('link')}
-            className="p-1 rounded hover:bg-surface-200 text-surface-600"
+            className="p-1 rounded hover:bg-white/[0.06] text-surface-600"
             title="Link"
           >
             <LinkIcon className="w-4 h-4" />
@@ -69,14 +69,14 @@ export default function AboutSection({ content, onUpdate }) {
         </div>
         <textarea
           id="about-bio-textarea"
-          className="w-full rounded-b-lg border border-surface-300 border-t-0 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all resize-none"
+          className="w-full rounded-b-lg border border-white/[0.1] border-t-0 bg-white/[0.06] px-3 py-2 text-sm text-surface-800 placeholder:text-surface-500 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all resize-none"
           rows={6}
           value={bio}
           onChange={(e) => updateField('bio', e.target.value)}
           placeholder="Tell visitors about yourself..."
           maxLength={500}
         />
-        <p className="text-xs text-surface-400 mt-1 text-right">{bio.length}/500</p>
+        <p className="text-xs text-surface-500 mt-1 text-right">{bio.length}/500</p>
       </div>
     </div>
   );

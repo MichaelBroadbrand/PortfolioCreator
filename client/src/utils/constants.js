@@ -22,6 +22,11 @@ export const TEMPLATE_CATEGORIES = [
   'Freelancer',
   'Minimal',
   'Creative',
+  'Neon',
+  'Sunset',
+  'Brutalist',
+  'Ocean',
+  'Pastel',
 ];
 
 export const MAX_SECTIONS = 15;

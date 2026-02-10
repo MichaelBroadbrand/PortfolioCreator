@@ -67,15 +67,15 @@ export default function PublishModal({ portfolio, isOpen, onClose, onPublish }) 
       {published ? (
         /* Success state */
         <div className="text-center py-6 px-4">
-          <div className="w-16 h-16 bg-success-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Check className="w-8 h-8 text-success-600" />
+          <div className="w-16 h-16 bg-success-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Check className="w-8 h-8 text-success-500" />
           </div>
           <h2 className="text-2xl font-bold text-surface-900 mb-2">Your portfolio is live!</h2>
           <a
             href={publicUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-brand-600 hover:underline text-sm mb-6 block"
+            className="text-brand-400 hover:underline text-sm mb-6 block"
           >
             {publicUrl}
           </a>
@@ -95,16 +95,16 @@ export default function PublishModal({ portfolio, isOpen, onClose, onPublish }) 
         <div className="px-1">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-surface-900">Publish Your Portfolio</h2>
-            <button onClick={onClose} className="p-1 hover:bg-surface-100 rounded">
-              <X className="w-5 h-5 text-surface-400" />
+            <button onClick={onClose} className="p-1 hover:bg-white/[0.06] rounded">
+              <X className="w-5 h-5 text-surface-500" />
             </button>
           </div>
 
           <div className="space-y-4">
             {/* URL preview */}
-            <div className="bg-surface-50 rounded-lg px-4 py-3">
+            <div className="bg-white/[0.04] rounded-lg px-4 py-3">
               <p className="text-xs text-surface-500 mb-1">Public URL</p>
-              <p className="text-sm text-brand-600 font-mono truncate">{publicUrl}</p>
+              <p className="text-sm text-brand-400 font-mono truncate">{publicUrl}</p>
             </div>
 
             {/* Slug input */}
@@ -130,18 +130,18 @@ export default function PublishModal({ portfolio, isOpen, onClose, onPublish }) 
             <div>
               <label className="block text-sm font-medium text-surface-700 mb-1">SEO Description</label>
               <textarea
-                className="w-full rounded-lg border border-surface-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all resize-none"
+                className="w-full rounded-lg border border-white/[0.1] bg-white/[0.06] px-3 py-2 text-sm text-surface-800 placeholder:text-surface-500 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all resize-none"
                 rows={3}
                 value={seoDescription}
                 onChange={(e) => setSeoDescription(e.target.value.slice(0, 160))}
                 placeholder="A brief description for search results..."
                 maxLength={160}
               />
-              <p className="text-xs text-surface-400 mt-1 text-right">{seoDescription.length}/160</p>
+              <p className="text-xs text-surface-500 mt-1 text-right">{seoDescription.length}/160</p>
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 mt-6 pt-4 border-t">
+          <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-white/[0.06]">
             <Button variant="ghost" onClick={onClose}>Cancel</Button>
             <Button onClick={handlePublish} loading={publishing}>
               Publish

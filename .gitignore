@@ -5,6 +5,8 @@ node_modules/
 .env
 .env.local
 .env.*.local
+serversecrets.env
+clientsecrets.env
 
 # Build output
 dist/

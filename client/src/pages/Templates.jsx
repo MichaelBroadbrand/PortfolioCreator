@@ -42,7 +42,7 @@ export default function Templates() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-surface-50">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 py-12">
         {/* Header */}
@@ -50,7 +50,7 @@ export default function Templates() {
           <h1 className="text-3xl font-bold text-surface-900 font-heading">
             Choose a Template
           </h1>
-          <p className="text-surface-500 mt-2">
+          <p className="text-surface-600 mt-2">
             Pick a starting point — you can customise everything later
           </p>
         </div>

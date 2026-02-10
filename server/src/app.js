@@ -17,7 +17,17 @@ const app = express();
 // Security middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: function (origin, callback) {
+    const allowed = (process.env.CLIENT_URL || 'http://localhost:5173')
+      .split(',')
+      .map((u) => u.trim());
+    // Allow requests with no origin (mobile apps, curl, server-to-server)
+    if (!origin || allowed.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 

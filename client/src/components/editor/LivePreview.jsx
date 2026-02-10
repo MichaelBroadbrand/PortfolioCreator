@@ -1,6 +1,6 @@
 import { X, Monitor, Tablet, Smartphone } from 'lucide-react';
 import { useEditor } from '../../context/EditorContext';
-import { DefaultSectionPreview } from './SectionRenderer';
+import PortfolioView from '../public/PortfolioView';
 
 const deviceWidths = {
   desktop: '100%',
@@ -19,16 +19,11 @@ export default function LivePreview({ onClose }) {
 
   if (!portfolio) return null;
 
-  const theme = portfolio?.theme;
-  const visibleSections = [...portfolio.sections]
-    .filter((s) => s.visible)
-    .sort((a, b) => a.order - b.order);
-
   return (
-    <div className="fixed inset-0 z-50 bg-surface-100 flex flex-col">
+    <div className="fixed inset-0 z-50 bg-surface-50 flex flex-col">
       {/* Top bar */}
-      <div className="flex items-center justify-between px-4 py-3 bg-surface-800">
-        <h3 className="text-white text-sm font-medium">Live Preview</h3>
+      <div className="flex items-center justify-between px-4 py-3 bg-surface-100 border-b border-white/[0.06]">
+        <h3 className="text-surface-900 text-sm font-medium">Live Preview</h3>
         <div className="flex items-center gap-2">
           {devices.map(({ id, icon: Icon }) => (
             <button
@@ -36,32 +31,30 @@ export default function LivePreview({ onClose }) {
               onClick={() => setPreviewDevice(id)}
               className={`p-2 rounded-lg transition-colors ${
                 previewDevice === id
-                  ? 'bg-brand-500 text-white'
-                  : 'text-surface-400 hover:text-white'
+                  ? 'bg-brand-500 text-surface-50'
+                  : 'text-surface-500 hover:text-surface-800'
               }`}
             >
               <Icon className="w-4 h-4" />
             </button>
           ))}
-          <div className="w-px h-6 bg-surface-600 mx-2" />
-          <button onClick={onClose} className="p-2 text-surface-400 hover:text-white rounded-lg">
+          <div className="w-px h-6 bg-white/[0.06] mx-2" />
+          <button onClick={onClose} className="p-2 text-surface-500 hover:text-surface-800 rounded-lg">
             <X className="w-5 h-5" />
           </button>
         </div>
       </div>
 
-      {/* Preview area */}
-      <div className="flex-1 overflow-auto p-4 lg:p-8">
+      {/* Preview area — renders the actual layout */}
+      <div className="flex-1 overflow-auto">
         <div
-          className="bg-white rounded-lg shadow-sm overflow-hidden mx-auto"
+          className="mx-auto overflow-hidden"
           style={{
             width: deviceWidths[previewDevice],
-            maxWidth: previewDevice === 'desktop' ? '56rem' : '100%',
+            maxWidth: '100%',
           }}
         >
-          {visibleSections.map((section) => (
-            <DefaultSectionPreview key={section._id} section={section} theme={theme} />
-          ))}
+          <PortfolioView portfolio={portfolio} />
         </div>
       </div>
     </div>

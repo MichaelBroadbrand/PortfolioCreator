@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { FileQuestion, AlertCircle } from 'lucide-react';
 import PortfolioView from '../components/public/PortfolioView';
-import PortfolioHeader from '../components/public/PortfolioHeader';
 import PortfolioFooter from '../components/public/PortfolioFooter';
 import { FullPageLoader } from '../components/common/Loader';
 import { getPublicPortfolio } from '../services/publicService';
@@ -70,17 +69,10 @@ export default function PublicPortfolio() {
 
   if (!portfolio) return null;
 
+  // Each layout controls its own container/wrapper — no hardcoded card
   return (
-    <div className="min-h-screen bg-surface-100">
-      <PortfolioHeader portfolio={portfolio} />
-      <div className="p-4 lg:p-8">
-        <div
-          className="bg-white rounded-lg shadow-sm overflow-hidden mx-auto"
-          style={{ maxWidth: '56rem' }}
-        >
-          <PortfolioView portfolio={portfolio} />
-        </div>
-      </div>
+    <div className="min-h-screen">
+      <PortfolioView portfolio={portfolio} />
       <PortfolioFooter />
     </div>
   );

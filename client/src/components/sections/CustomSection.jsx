@@ -56,11 +56,11 @@ export default function CustomSection({ content, onUpdate }) {
       <div>
         <label className="block text-sm font-medium text-surface-700 mb-1">Content</label>
         {/* Rich text toolbar */}
-        <div className="flex items-center gap-0.5 border border-surface-200 rounded-t-lg px-2 py-1 bg-surface-50">
+        <div className="flex items-center gap-0.5 border border-white/[0.08] rounded-t-lg px-2 py-1 bg-white/[0.04]">
           <button
             type="button"
             onClick={() => applyFormat('bold')}
-            className="p-1.5 rounded hover:bg-surface-200 text-surface-600"
+            className="p-1.5 rounded hover:bg-white/[0.06] text-surface-600"
             title="Bold"
           >
             <Bold className="w-4 h-4" />
@@ -68,7 +68,7 @@ export default function CustomSection({ content, onUpdate }) {
           <button
             type="button"
             onClick={() => applyFormat('italic')}
-            className="p-1.5 rounded hover:bg-surface-200 text-surface-600"
+            className="p-1.5 rounded hover:bg-white/[0.06] text-surface-600"
             title="Italic"
           >
             <Italic className="w-4 h-4" />
@@ -76,25 +76,25 @@ export default function CustomSection({ content, onUpdate }) {
           <button
             type="button"
             onClick={() => applyFormat('underline')}
-            className="p-1.5 rounded hover:bg-surface-200 text-surface-600"
+            className="p-1.5 rounded hover:bg-white/[0.06] text-surface-600"
             title="Underline"
           >
             <Underline className="w-4 h-4" />
           </button>
-          <div className="w-px h-5 bg-surface-200 mx-1" />
+          <div className="w-px h-5 bg-white/[0.08] mx-1" />
           <button
             type="button"
             onClick={() => applyFormat('link')}
-            className="p-1.5 rounded hover:bg-surface-200 text-surface-600"
+            className="p-1.5 rounded hover:bg-white/[0.06] text-surface-600"
             title="Link"
           >
             <LinkIcon className="w-4 h-4" />
           </button>
-          <div className="w-px h-5 bg-surface-200 mx-1" />
+          <div className="w-px h-5 bg-white/[0.08] mx-1" />
           <button
             type="button"
             onClick={() => applyFormat('ul')}
-            className="p-1.5 rounded hover:bg-surface-200 text-surface-600"
+            className="p-1.5 rounded hover:bg-white/[0.06] text-surface-600"
             title="Bullet List"
           >
             <List className="w-4 h-4" />
@@ -102,7 +102,7 @@ export default function CustomSection({ content, onUpdate }) {
           <button
             type="button"
             onClick={() => applyFormat('ol')}
-            className="p-1.5 rounded hover:bg-surface-200 text-surface-600"
+            className="p-1.5 rounded hover:bg-white/[0.06] text-surface-600"
             title="Numbered List"
           >
             <ListOrdered className="w-4 h-4" />
@@ -110,13 +110,13 @@ export default function CustomSection({ content, onUpdate }) {
         </div>
         <textarea
           id="custom-section-body"
-          className="w-full rounded-b-lg border border-surface-300 border-t-0 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all resize-none"
+          className="w-full rounded-b-lg border border-white/[0.1] border-t-0 bg-white/[0.06] px-3 py-2 text-sm font-mono text-surface-800 placeholder:text-surface-500 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all resize-none"
           rows={8}
           value={body}
           onChange={(e) => updateField('body', e.target.value)}
           placeholder="<p>Add your content here</p>"
         />
-        <p className="text-xs text-surface-400 mt-1">Supports HTML. Use the toolbar for quick formatting.</p>
+        <p className="text-xs text-surface-500 mt-1">Supports HTML. Use the toolbar for quick formatting.</p>
       </div>
     </div>
   );

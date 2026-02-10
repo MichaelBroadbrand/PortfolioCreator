@@ -16,21 +16,21 @@ function StatCard({ icon: Icon, label, value, color, trend }) {
   const TrendIcon = isPositive ? TrendingUp : TrendingDown;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-5">
+    <div className="bg-white/[0.06] backdrop-blur-xl border border-white/[0.08] rounded-xl p-5 hover:border-white/[0.12] transition-colors">
       <div className="flex items-center justify-between mb-3">
         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${color}`}>
           <Icon className="w-5 h-5" />
         </div>
         {trend !== null && trend !== undefined && (
           <span className={`flex items-center gap-0.5 text-xs font-medium ${
-            isPositive ? 'text-success-600' : 'text-error-600'
+            isPositive ? 'text-success-500' : 'text-error-500'
           }`}>
             <TrendIcon className="w-3 h-3" /> {trend}
           </span>
         )}
       </div>
       <p className="text-3xl font-bold text-surface-900">{value}</p>
-      <p className="text-sm text-surface-500 mt-1">{label}</p>
+      <p className="text-sm text-surface-600 mt-1">{label}</p>
     </div>
   );
 }
@@ -88,15 +88,15 @@ export default function Analytics() {
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-surface-900">Analytics</h1>
           <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-surface-400" />
+            <Calendar className="w-4 h-4 text-surface-500" />
             {DATE_RANGES.map(({ label, value }) => (
               <button
                 key={value}
                 onClick={() => setDateRange(value)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                   dateRange === value
-                    ? 'bg-brand-500 text-white'
-                    : 'bg-surface-100 text-surface-600 hover:bg-surface-200'
+                    ? 'bg-brand-500 text-surface-50'
+                    : 'bg-white/[0.06] text-surface-600 hover:bg-white/[0.1]'
                 }`}
               >
                 {label}
@@ -115,32 +115,32 @@ export default function Analytics() {
                 icon={Eye}
                 label={`Views (last ${dateRange} days)`}
                 value={totalChartViews.toLocaleString()}
-                color="bg-brand-100 text-brand-600"
+                color="bg-brand-500/10 text-brand-400"
                 trend={trend}
               />
               <StatCard
                 icon={MessageSquare}
                 label="Contact Messages"
                 value={overview?.totalContacts || 0}
-                color="bg-success-100 text-success-600"
+                color="bg-success-500/10 text-success-500"
               />
               <StatCard
                 icon={TrendingUp}
                 label="Avg. Daily Views"
                 value={chartData.length > 0 ? Math.round(totalChartViews / chartData.length) : 0}
-                color="bg-purple-100 text-purple-600"
+                color="bg-purple-500/10 text-purple-400"
               />
             </div>
 
             {/* Chart */}
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+            <div className="bg-white/[0.06] backdrop-blur-xl border border-white/[0.08] rounded-xl p-6 mb-8">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-surface-900">Views Over Time</h2>
                 {overview?.portfolios?.length > 0 && (
                   <select
                     value={selectedPortfolio}
                     onChange={(e) => setSelectedPortfolio(e.target.value)}
-                    className="text-sm border border-surface-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    className="text-sm border border-white/[0.1] bg-white/[0.06] text-surface-800 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-500/50"
                   >
                     <option value="all">All Portfolios</option>
                     {overview.portfolios.map((p) => (
@@ -151,7 +151,7 @@ export default function Analytics() {
               </div>
 
               {chartData.length === 0 ? (
-                <div className="h-72 flex flex-col items-center justify-center text-surface-400">
+                <div className="h-72 flex flex-col items-center justify-center text-surface-500">
                   <BarChart3 className="w-12 h-12 mb-3" />
                   <p className="text-sm">No view data yet. Share your published portfolio to start tracking.</p>
                 </div>
@@ -161,33 +161,35 @@ export default function Analytics() {
                     <AreaChart data={chartData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
                       <defs>
                         <linearGradient id="viewsGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.2} />
-                          <stop offset="95%" stopColor="#4f46e5" stopOpacity={0} />
+                          <stop offset="5%" stopColor="#eab308" stopOpacity={0.2} />
+                          <stop offset="95%" stopColor="#eab308" stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
                       <XAxis
                         dataKey="date"
-                        tick={{ fontSize: 11, fill: '#94a3b8' }}
+                        tick={{ fontSize: 11, fill: '#5a5a65' }}
                         tickFormatter={(v) => {
                           const d = new Date(v);
                           return `${d.getMonth() + 1}/${d.getDate()}`;
                         }}
                       />
-                      <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} />
+                      <YAxis tick={{ fontSize: 11, fill: '#5a5a65' }} />
                       <Tooltip
                         contentStyle={{
-                          border: '1px solid #e2e8f0',
+                          backgroundColor: '#131316',
+                          border: '1px solid rgba(255,255,255,0.08)',
                           borderRadius: '8px',
-                          boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
+                          boxShadow: '0 4px 6px -1px rgba(0,0,0,0.3)',
                           fontSize: '13px',
+                          color: '#f4f4f5',
                         }}
                         labelFormatter={(v) => new Date(v).toLocaleDateString()}
                       />
                       <Area
                         type="monotone"
                         dataKey="views"
-                        stroke="#4f46e5"
+                        stroke="#eab308"
                         strokeWidth={2}
                         fill="url(#viewsGradient)"
                       />

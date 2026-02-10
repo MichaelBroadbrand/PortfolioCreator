@@ -37,7 +37,7 @@ export default function HeroSection({ content, onUpdate }) {
       <div>
         <label className="block text-sm font-medium text-surface-700 mb-1">Subtitle</label>
         <textarea
-          className="w-full rounded-lg border border-surface-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all"
+          className="w-full rounded-lg border border-white/[0.1] bg-white/[0.06] px-3 py-2 text-sm text-surface-800 placeholder:text-surface-500 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all"
           rows={2}
           value={content.subtitle || ''}
           onChange={(e) => updateField('subtitle', e.target.value)}

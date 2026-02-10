@@ -8,13 +8,13 @@ function ExperienceEntry({ entry, index, isOpen, onToggle, onUpdate, onRemove })
   };
 
   return (
-    <div className="border border-surface-200 rounded-lg overflow-hidden">
+    <div className="border border-white/[0.08] rounded-lg overflow-hidden">
       <button
         type="button"
         onClick={onToggle}
-        className="w-full flex items-center gap-2 px-3 py-2.5 bg-surface-50 hover:bg-surface-100 transition-colors text-left"
+        className="w-full flex items-center gap-2 px-3 py-2.5 bg-white/[0.04] hover:bg-white/[0.06] transition-colors text-left"
       >
-        <GripVertical className="w-4 h-4 text-surface-400 shrink-0" />
+        <GripVertical className="w-4 h-4 text-surface-500 shrink-0" />
         {isOpen ? <ChevronDown className="w-4 h-4 text-surface-500 shrink-0" /> : <ChevronRight className="w-4 h-4 text-surface-500 shrink-0" />}
         <div className="flex-1 min-w-0">
           <span className="text-sm font-medium text-surface-800 truncate block">
@@ -27,7 +27,7 @@ function ExperienceEntry({ entry, index, isOpen, onToggle, onUpdate, onRemove })
       </button>
 
       {isOpen && (
-        <div className="p-3 space-y-3 border-t border-surface-200">
+        <div className="p-3 space-y-3 border-t border-white/[0.08]">
           <Input
             label="Company"
             value={entry.company || ''}
@@ -47,7 +47,7 @@ function ExperienceEntry({ entry, index, isOpen, onToggle, onUpdate, onRemove })
               <label className="block text-sm font-medium text-surface-700 mb-1">Start Date</label>
               <input
                 type="month"
-                className="w-full rounded-lg border border-surface-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all"
+                className="w-full rounded-lg border border-white/[0.1] bg-white/[0.06] px-3 py-2 text-sm text-surface-800 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all"
                 value={entry.startDate || ''}
                 onChange={(e) => updateField('startDate', e.target.value)}
               />
@@ -56,7 +56,7 @@ function ExperienceEntry({ entry, index, isOpen, onToggle, onUpdate, onRemove })
               <label className="block text-sm font-medium text-surface-700 mb-1">End Date</label>
               <input
                 type="month"
-                className="w-full rounded-lg border border-surface-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all disabled:opacity-50 disabled:bg-surface-50"
+                className="w-full rounded-lg border border-white/[0.1] bg-white/[0.06] px-3 py-2 text-sm text-surface-800 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all disabled:opacity-50 disabled:bg-white/[0.03]"
                 value={entry.endDate || ''}
                 onChange={(e) => updateField('endDate', e.target.value)}
                 disabled={entry.current}
@@ -72,7 +72,7 @@ function ExperienceEntry({ entry, index, isOpen, onToggle, onUpdate, onRemove })
                 const checked = e.target.checked;
                 onUpdate(index, { ...entry, current: checked, ...(checked && { endDate: '' }) });
               }}
-              className="w-4 h-4 rounded border-surface-300 text-brand-500 focus:ring-brand-500"
+              className="w-4 h-4 rounded border-white/[0.1] bg-white/[0.06] text-brand-500 focus:ring-brand-500"
             />
             <span className="text-sm text-surface-700">I currently work here</span>
           </label>
@@ -80,7 +80,7 @@ function ExperienceEntry({ entry, index, isOpen, onToggle, onUpdate, onRemove })
           <div>
             <label className="block text-sm font-medium text-surface-700 mb-1">Description</label>
             <textarea
-              className="w-full rounded-lg border border-surface-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all resize-none"
+              className="w-full rounded-lg border border-white/[0.1] bg-white/[0.06] px-3 py-2 text-sm text-surface-800 placeholder:text-surface-500 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all resize-none"
               rows={4}
               value={entry.description || ''}
               onChange={(e) => updateField('description', e.target.value)}
@@ -91,7 +91,7 @@ function ExperienceEntry({ entry, index, isOpen, onToggle, onUpdate, onRemove })
           <button
             type="button"
             onClick={() => onRemove(index)}
-            className="text-sm text-error-600 hover:text-error-700 font-medium"
+            className="text-sm text-error-500 hover:text-error-400 font-medium"
           >
             <Trash2 className="w-3.5 h-3.5 inline mr-1" />
             Remove Experience
@@ -140,7 +140,7 @@ export default function ExperienceSection({ content, onUpdate }) {
       <button
         type="button"
         onClick={addEntry}
-        className="w-full py-3 border-2 border-dashed border-surface-300 rounded-lg text-sm text-surface-500 hover:border-brand-400 hover:text-brand-600 transition-colors flex items-center justify-center gap-1"
+        className="w-full py-3 border-2 border-dashed border-white/[0.1] rounded-lg text-sm text-surface-500 hover:border-brand-500/50 hover:text-brand-400 transition-colors flex items-center justify-center gap-1"
       >
         <Plus className="w-4 h-4" />
         Add Experience

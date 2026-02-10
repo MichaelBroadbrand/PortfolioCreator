@@ -48,13 +48,13 @@ export default function ContactSection({ content, onUpdate }) {
       <div className="flex items-center justify-between py-2">
         <div>
           <span className="text-sm font-medium text-surface-700">Show contact form</span>
-          <p className="text-xs text-surface-400 mt-0.5">Visitors can send you messages directly</p>
+          <p className="text-xs text-surface-500 mt-0.5">Visitors can send you messages directly</p>
         </div>
         <button
           type="button"
           onClick={() => updateField('showContactForm', !content.showContactForm)}
           className={`relative w-11 h-6 rounded-full transition-colors ${
-            content.showContactForm ? 'bg-brand-500' : 'bg-surface-300'
+            content.showContactForm ? 'bg-brand-500' : 'bg-surface-400'
           }`}
         >
           <div

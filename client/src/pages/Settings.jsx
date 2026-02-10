@@ -49,19 +49,19 @@ function ProfileTab({ profile, onSave }) {
 
         {/* Avatar */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-surface-700 mb-2">Avatar</label>
+          <label className="block text-sm font-medium text-surface-600 mb-2">Avatar</label>
           <div className="flex items-center gap-4">
             <div
               onClick={() => !uploading && fileInputRef.current?.click()}
-              className="w-20 h-20 rounded-full bg-surface-100 border-2 border-dashed border-surface-300 flex items-center justify-center overflow-hidden group cursor-pointer hover:border-brand-400 transition-colors relative"
+              className="w-20 h-20 rounded-full bg-white/[0.06] border-2 border-dashed border-surface-400 flex items-center justify-center overflow-hidden group cursor-pointer hover:border-brand-500/50 transition-colors relative"
             >
               {avatarUrl ? (
                 <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
               ) : (
-                <Camera className="w-6 h-6 text-surface-400" />
+                <Camera className="w-6 h-6 text-surface-500" />
               )}
               {uploading && (
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center rounded-full">
+                <div className="absolute inset-0 bg-black/60 flex items-center justify-center rounded-full">
                   <Loader2 className="w-6 h-6 text-white animate-spin" />
                 </div>
               )}
@@ -69,12 +69,12 @@ function ProfileTab({ profile, onSave }) {
             <div>
               <button
                 onClick={() => !uploading && fileInputRef.current?.click()}
-                className="text-sm text-brand-600 hover:text-brand-700 font-medium"
+                className="text-sm text-brand-400 hover:text-brand-300 font-medium"
                 disabled={uploading}
               >
                 {uploading ? 'Uploading...' : 'Upload photo'}
               </button>
-              <p className="text-xs text-surface-400 mt-0.5">JPG, PNG, or WebP. Max 5MB.</p>
+              <p className="text-xs text-surface-500 mt-0.5">JPG, PNG, or WebP. Max 5MB.</p>
             </div>
             <input
               ref={fileInputRef}
@@ -95,16 +95,16 @@ function ProfileTab({ profile, onSave }) {
           />
 
           <div>
-            <label className="block text-sm font-medium text-surface-700 mb-1">Bio</label>
+            <label className="block text-sm font-medium text-surface-600 mb-1">Bio</label>
             <textarea
-              className="w-full rounded-lg border border-surface-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all resize-none"
+              className="w-full rounded-lg border border-white/[0.1] bg-white/[0.06] px-3 py-2 text-sm text-surface-800 placeholder:text-surface-500 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500/50 transition-all resize-none"
               rows={4}
               value={bio}
               onChange={(e) => setBio(e.target.value.slice(0, 500))}
               placeholder="Tell us about yourself..."
               maxLength={500}
             />
-            <p className="text-xs text-surface-400 mt-1 text-right">{bio.length}/500</p>
+            <p className="text-xs text-surface-500 mt-1 text-right">{bio.length}/500</p>
           </div>
 
           <Button onClick={handleSave} loading={saving}>Save Changes</Button>
@@ -121,11 +121,11 @@ function AccountTab({ profile }) {
         <h3 className="text-lg font-semibold text-surface-900 mb-4">Account Details</h3>
         <div className="space-y-4 max-w-md">
           <Input label="Email" value={profile.email || ''} disabled />
-          <div className="bg-surface-50 rounded-lg p-4">
+          <div className="bg-white/[0.04] border border-white/[0.06] rounded-lg p-4">
             <p className="text-sm font-medium text-surface-700">Plan</p>
-            <p className="text-sm text-surface-500 capitalize">{profile.plan || 'Free'}</p>
+            <p className="text-sm text-surface-600 capitalize">{profile.plan || 'Free'}</p>
           </div>
-          <p className="text-xs text-surface-400">
+          <p className="text-xs text-surface-500">
             Account managed via Clerk. Password and connected accounts are handled there.
           </p>
         </div>
@@ -157,16 +157,16 @@ function NotificationsTab({ profile, onSave }) {
       <h3 className="text-lg font-semibold text-surface-900 mb-4">Email Notifications</h3>
       <div className="space-y-4 max-w-md">
         {toggleItems.map(({ key, label, description }) => (
-          <div key={key} className="flex items-center justify-between py-3 border-b border-surface-100">
+          <div key={key} className="flex items-center justify-between py-3 border-b border-white/[0.06]">
             <div>
               <p className="text-sm font-medium text-surface-800">{label}</p>
-              <p className="text-xs text-surface-400 mt-0.5">{description}</p>
+              <p className="text-xs text-surface-500 mt-0.5">{description}</p>
             </div>
             <button
               type="button"
               onClick={() => toggleNotification(key)}
               className={`relative w-11 h-6 rounded-full transition-colors ${
-                notifications[key] ? 'bg-brand-500' : 'bg-surface-300'
+                notifications[key] ? 'bg-brand-500' : 'bg-surface-400'
               }`}
             >
               <div
@@ -187,10 +187,10 @@ function DangerTab({ onDelete }) {
 
   return (
     <div>
-      <h3 className="text-lg font-semibold text-error-700 mb-4">Danger Zone</h3>
-      <div className="border border-error-200 rounded-lg p-4 max-w-md">
+      <h3 className="text-lg font-semibold text-error-500 mb-4">Danger Zone</h3>
+      <div className="border border-error-500/20 bg-error-500/5 rounded-lg p-4 max-w-md">
         <h4 className="font-medium text-surface-900 mb-1">Delete Account</h4>
-        <p className="text-sm text-surface-500 mb-4">
+        <p className="text-sm text-surface-600 mb-4">
           Permanently delete your account and all portfolios. This action cannot be undone.
         </p>
         <Button variant="danger" size="sm" onClick={() => setShowConfirm(true)}>
@@ -273,10 +273,10 @@ export default function Settings() {
                   onClick={() => setActiveTab(id)}
                   className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left ${
                     activeTab === id
-                      ? 'bg-brand-50 text-brand-700'
+                      ? 'bg-brand-500/10 text-brand-400'
                       : id === 'danger'
-                        ? 'text-error-500 hover:bg-error-50'
-                        : 'text-surface-600 hover:bg-surface-100'
+                        ? 'text-error-500 hover:bg-error-500/10'
+                        : 'text-surface-600 hover:bg-white/[0.06]'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -287,9 +287,9 @@ export default function Settings() {
           </div>
 
           {/* Tab content */}
-          <div className="flex-1 bg-white rounded-xl shadow-sm p-6">
+          <div className="flex-1 bg-white/[0.06] backdrop-blur-xl border border-white/[0.08] rounded-xl p-6">
             {loading ? (
-              <p className="text-surface-400">Loading...</p>
+              <p className="text-surface-500">Loading...</p>
             ) : (
               <>
                 {activeTab === 'profile' && <ProfileTab profile={profile} onSave={handleSave} />}

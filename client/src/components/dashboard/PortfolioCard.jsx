@@ -49,7 +49,7 @@ export default function PortfolioCard({ portfolio, onDuplicate, onDelete }) {
   };
 
   return (
-    <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
+    <div className="bg-white/[0.06] backdrop-blur-xl border border-white/[0.08] rounded-xl overflow-hidden hover:border-white/[0.12] hover:shadow-[0_0_30px_rgba(234,179,8,0.08)] transition-all group">
       {/* Thumbnail */}
       <div
         className={`aspect-video bg-gradient-to-br ${gradient} relative cursor-pointer`}
@@ -71,16 +71,16 @@ export default function PortfolioCard({ portfolio, onDuplicate, onDelete }) {
           </button>
 
           {menuOpen && (
-            <div className="absolute right-0 top-full mt-1 w-44 bg-white rounded-lg shadow-lg border border-surface-200 py-1 z-10">
+            <div className="absolute right-0 top-full mt-1 w-44 bg-surface-100 border border-white/[0.08] rounded-lg shadow-lg py-1 z-10">
               <button
                 onClick={() => { navigate(`/editor/${portfolio._id}`); setMenuOpen(false); }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-surface-700 hover:bg-surface-50"
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-surface-700 hover:bg-white/[0.06]"
               >
                 <Edit3 className="w-4 h-4" /> Edit
               </button>
               <button
                 onClick={() => { onDuplicate(portfolio._id); setMenuOpen(false); }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-surface-700 hover:bg-surface-50"
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-surface-700 hover:bg-white/[0.06]"
               >
                 <Copy className="w-4 h-4" /> Duplicate
               </button>
@@ -88,7 +88,7 @@ export default function PortfolioCard({ portfolio, onDuplicate, onDelete }) {
                 <>
                   <button
                     onClick={copyLink}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-surface-700 hover:bg-surface-50"
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-surface-700 hover:bg-white/[0.06]"
                   >
                     <LinkIcon className="w-4 h-4" /> Copy Link
                   </button>
@@ -96,17 +96,17 @@ export default function PortfolioCard({ portfolio, onDuplicate, onDelete }) {
                     href={`/p/${portfolio.slug}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-surface-700 hover:bg-surface-50"
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-surface-700 hover:bg-white/[0.06]"
                     onClick={() => setMenuOpen(false)}
                   >
                     <ExternalLink className="w-4 h-4" /> View Live
                   </a>
                 </>
               )}
-              <div className="border-t border-surface-100 my-1" />
+              <div className="border-t border-white/[0.06] my-1" />
               <button
                 onClick={() => { onDelete(portfolio); setMenuOpen(false); }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-error-600 hover:bg-error-50"
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-error-500 hover:bg-error-500/10"
               >
                 <Trash2 className="w-4 h-4" /> Delete
               </button>
@@ -116,10 +116,10 @@ export default function PortfolioCard({ portfolio, onDuplicate, onDelete }) {
       </div>
 
       {/* Info */}
-      <div className="p-4">
+      <div className="p-4 bg-surface-100">
         <div className="flex items-start justify-between gap-2">
           <h3
-            className="font-semibold text-surface-900 truncate cursor-pointer hover:text-brand-600"
+            className="font-semibold text-surface-900 truncate cursor-pointer hover:text-brand-400"
             onClick={() => navigate(`/editor/${portfolio._id}`)}
           >
             {portfolio.name}
@@ -127,14 +127,14 @@ export default function PortfolioCard({ portfolio, onDuplicate, onDelete }) {
           <span
             className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${
               isPublished
-                ? 'bg-success-100 text-success-700'
-                : 'bg-accent-100 text-accent-700'
+                ? 'bg-success-500/10 text-success-500'
+                : 'bg-brand-500/10 text-brand-400'
             }`}
           >
             {isPublished ? 'Published' : 'Draft'}
           </span>
         </div>
-        <p className="text-xs text-surface-400 mt-1">
+        <p className="text-xs text-surface-500 mt-1">
           Edited {formatTimeAgo(portfolio.updatedAt)}
         </p>
       </div>

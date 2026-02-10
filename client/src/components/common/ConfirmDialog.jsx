@@ -27,11 +27,11 @@ export default function ConfirmDialog({
       }
     >
       <div className="flex flex-col items-center text-center py-2">
-        <div className="w-12 h-12 rounded-full bg-error-50 flex items-center justify-center mb-4">
-          <AlertTriangle className="w-6 h-6 text-error-600" />
+        <div className="w-12 h-12 rounded-full bg-error-500/10 flex items-center justify-center mb-4">
+          <AlertTriangle className="w-6 h-6 text-error-500" />
         </div>
         <h3 className="text-lg font-semibold text-surface-900 mb-2">{title}</h3>
-        <p className="text-sm text-surface-500">{message}</p>
+        <p className="text-sm text-surface-600">{message}</p>
       </div>
     </Modal>
   );
