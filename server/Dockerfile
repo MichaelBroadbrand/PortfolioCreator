@@ -18,4 +18,4 @@ COPY src/ ./src/
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 EXPOSE 5000
-CMD ["sh", "-c", "node src/seeds/templates.js && node server.js"]
+CMD ["sh", "-c", "node src/seeds/templates.js; node server.js"]

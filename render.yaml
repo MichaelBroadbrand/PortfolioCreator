@@ -5,7 +5,7 @@ services:
     runtime: docker
     dockerfilePath: ./server/Dockerfile
     dockerContext: ./server
-    dockerCommand: sh -c "node src/seeds/templates.js && node server.js"
+    dockerCommand: sh -c "node src/seeds/templates.js; node server.js"
     plan: free
     envVars:
       - key: NODE_ENV
