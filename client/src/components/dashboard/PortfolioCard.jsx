@@ -71,7 +71,7 @@ export default function PortfolioCard({ portfolio, onDuplicate, onDelete }) {
           </button>
 
           {menuOpen && (
-            <div className="absolute right-0 top-full mt-1 w-44 bg-surface-100 border border-white/[0.08] rounded-lg shadow-lg py-1 z-10">
+            <div className="absolute right-0 top-full mt-1 w-44 bg-surface-100 border border-white/[0.08] rounded-lg shadow-lg py-1 z-10" onClick={(e) => e.stopPropagation()}>
               <button
                 onClick={() => { navigate(`/editor/${portfolio._id}`); setMenuOpen(false); }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm text-surface-700 hover:bg-white/[0.06]"
