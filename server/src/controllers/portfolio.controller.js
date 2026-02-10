@@ -53,24 +53,37 @@ async function createFromTemplate(req, res, next) {
       visible: true,
     }));
 
-    // Generate unique slug
+    // Generate unique slug with retry on collision
     const baseName = `${req.user.displayName || 'my'}-portfolio`;
-    let slug = slugify(baseName, { lower: true, strict: true });
-    const existing = await Portfolio.findOne({ slug });
-    if (existing) {
-      slug = `${slug}-${Date.now().toString(36)}`;
+    const baseSlug = slugify(baseName, { lower: true, strict: true });
+
+    let portfolio;
+    let slug = baseSlug;
+    for (let attempt = 0; attempt < 5; attempt++) {
+      try {
+        portfolio = await Portfolio.create({
+          userId,
+          templateId: template._id || null,
+          name: `${template.name} Portfolio`,
+          slug,
+          status: 'draft',
+          sections,
+          theme: { ...template.defaultTheme },
+          layout: template.layout || 'standard',
+        });
+        break;
+      } catch (err) {
+        if (err.code === 11000 && err.keyPattern?.slug) {
+          slug = `${baseSlug}-${Date.now().toString(36)}`;
+        } else {
+          throw err;
+        }
+      }
     }
 
-    const portfolio = await Portfolio.create({
-      userId,
-      templateId: template._id || null,
-      name: `${template.name} Portfolio`,
-      slug,
-      status: 'draft',
-      sections,
-      theme: { ...template.defaultTheme },
-      layout: template.layout || 'standard',
-    });
+    if (!portfolio) {
+      return res.status(409).json({ success: false, message: 'Could not generate unique URL. Please try again.' });
+    }
 
     res.status(201).json({ success: true, data: portfolio });
   } catch (error) {
