@@ -148,15 +148,14 @@ export default function Dashboard() {
         )}
       </div>
 
-      {deleteTarget && (
-        <ConfirmDialog
-          title="Delete Portfolio"
-          message={`Are you sure you want to delete "${deleteTarget.name}"? This action can be undone within 30 days.`}
-          confirmLabel="Delete"
-          onConfirm={handleDelete}
-          onCancel={() => setDeleteTarget(null)}
-        />
-      )}
+      <ConfirmDialog
+        isOpen={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        title="Delete Portfolio"
+        message={`Are you sure you want to delete "${deleteTarget?.name}"? This action cannot be undone.`}
+        confirmText="Delete"
+        onConfirm={handleDelete}
+      />
     </DashboardLayout>
   );
 }
