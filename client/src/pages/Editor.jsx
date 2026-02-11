@@ -112,7 +112,7 @@ function SectionEditPanel() {
       {/* Body */}
       <div className="flex-1 overflow-auto p-4">
         {PanelComponent ? (
-          <PanelComponent content={content} onUpdate={onUpdate} />
+          <PanelComponent content={content} onUpdate={onUpdate} layout={portfolio?.layout} />
         ) : (
           <p className="text-sm text-surface-500">
             No editing panel available for {section.type} sections.

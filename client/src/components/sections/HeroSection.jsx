@@ -1,24 +1,30 @@
 import Input from '../common/Input';
 import ImageUploadZone from '../common/ImageUploadZone';
 
-export default function HeroSection({ content, onUpdate }) {
+// Layouts whose Hero renderer actually displays a profile image
+const layoutsWithHeroImage = ['standard', 'sidebar', 'split', 'immersive', 'showcase'];
+
+export default function HeroSection({ content, onUpdate, layout }) {
   const updateField = (field, value) => onUpdate({ [field]: value });
+  const supportsImage = layoutsWithHeroImage.includes(layout);
 
   return (
     <div className="space-y-4">
-      {/* Profile image upload zone */}
-      <div>
-        <label className="block text-sm font-medium text-surface-700 mb-1">Profile Image</label>
-        <div className="flex justify-center">
-          <ImageUploadZone
-            value={content.profileImage || ''}
-            onChange={(url) => updateField('profileImage', url)}
-            shape="circle"
-            className="w-24 h-24"
-            folder="portfolio-builder/avatars"
-          />
+      {/* Profile image upload zone – only for layouts that render it */}
+      {supportsImage && (
+        <div>
+          <label className="block text-sm font-medium text-surface-700 mb-1">Profile Image</label>
+          <div className="flex justify-center">
+            <ImageUploadZone
+              value={content.profileImage || ''}
+              onChange={(url) => updateField('profileImage', url)}
+              shape="circle"
+              className="w-24 h-24"
+              folder="portfolio-builder/avatars"
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       <Input
         label="Display Name"
