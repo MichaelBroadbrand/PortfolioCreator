@@ -133,6 +133,9 @@ export default function Navbar() {
             </>
           ) : (
             <>
+              <Link to="/pricing" className={navLinkClass('/pricing')}>
+                Pricing
+              </Link>
               <Link to="/sign-in">
                 <Button variant="ghost">Log In</Button>
               </Link>
@@ -215,6 +218,13 @@ export default function Navbar() {
                 </>
               ) : (
                 <>
+                  <Link
+                    to="/pricing"
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/[0.06] text-sm text-surface-700"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Pricing
+                  </Link>
                   <Link
                     to="/sign-in"
                     onClick={() => setMobileMenuOpen(false)}

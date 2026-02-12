@@ -8,7 +8,7 @@ const templateSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ['developer', 'designer', 'freelancer', 'minimal', 'creative', 'neon', 'sunset', 'brutalist', 'ocean', 'pastel'],
+      enum: ['developer', 'designer', 'freelancer', 'minimal', 'creative', 'neon', 'sunset', 'brutalist', 'ocean', 'pastel', 'noir', 'ember', 'architect', 'candy', 'midnight', 'terracotta', 'graphite', 'aurora', 'ivory', 'volt'],
       required: true,
     },
     thumbnail: {
@@ -44,7 +44,7 @@ const templateSchema = new mongoose.Schema(
     },
     layout: {
       type: String,
-      enum: ['sidebar', 'immersive', 'split', 'standard', 'grid', 'showcase'],
+      enum: ['sidebar', 'immersive', 'split', 'standard', 'grid', 'showcase', 'magazine', 'cards', 'blueprint', 'technical'],
       default: 'standard',
     },
     popularity: {

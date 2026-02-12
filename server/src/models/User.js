@@ -31,6 +31,25 @@ const userSchema = new mongoose.Schema(
       enum: ['free', 'pro'],
       default: 'free',
     },
+    lsCustomerId: {
+      type: String,
+      default: null,
+      index: true,
+      sparse: true,
+    },
+    lsSubscriptionId: {
+      type: String,
+      default: null,
+    },
+    customerPortalUrl: {
+      type: String,
+      default: null,
+    },
+    subscriptionStatus: {
+      type: String,
+      enum: ['active', 'past_due', 'canceled', 'unpaid', 'trialing', null],
+      default: null,
+    },
     emailNotifications: {
       contactForm: { type: Boolean, default: true },
       weeklyDigest: { type: Boolean, default: true },

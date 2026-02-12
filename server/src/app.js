@@ -12,7 +12,9 @@ const publicRoutes = require('./routes/public.routes');
 const userRoutes = require('./routes/user.routes');
 const analyticsRoutes = require('./routes/analytics.routes');
 const aiRoutes = require('./routes/ai.routes');
+const billingRoutes = require('./routes/billing.routes');
 const { aiLimiter } = require('./middleware/rateLimiter');
+const { handleWebhook } = require('./controllers/billing.controller');
 
 const app = express();
 
@@ -32,6 +34,9 @@ app.use(cors({
   },
   credentials: true,
 }));
+
+// Lemon Squeezy webhook — must use raw body for signature verification, mounted before JSON parser
+app.post('/api/billing/webhook', express.raw({ type: 'application/json' }), handleWebhook);
 
 // Body parsing
 app.use(express.json({ limit: '10mb' }));
@@ -57,6 +62,7 @@ app.use('/api/public', publicRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/ai', aiLimiter, aiRoutes);
+app.use('/api/billing', billingRoutes);
 
 // Error handler (must be last)
 app.use(errorHandler);

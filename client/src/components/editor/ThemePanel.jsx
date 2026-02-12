@@ -39,6 +39,16 @@ const FONT_PAIRINGS = [
   { id: 'space-inter', heading: 'Space Grotesk', body: 'Inter' },
   { id: 'merriweather-open', heading: 'Merriweather', body: 'Open Sans' },
   { id: 'poppins-nunito', heading: 'Poppins', body: 'Nunito' },
+  { id: 'bebas-karla', heading: 'Bebas Neue', body: 'Karla' },
+  { id: 'bitter-rubik', heading: 'Bitter', body: 'Rubik' },
+  { id: 'franklin-ibm', heading: 'Libre Franklin', body: 'IBM Plex Sans' },
+  { id: 'fredoka-quicksand', heading: 'Fredoka', body: 'Quicksand' },
+  { id: 'cormorant-garamond-fira', heading: 'Cormorant Garamond', body: 'Fira Sans' },
+  { id: 'lora-cabin', heading: 'Lora', body: 'Cabin' },
+  { id: 'rajdhani-barlow', heading: 'Rajdhani', body: 'Barlow' },
+  { id: 'geologica-lexend', heading: 'Geologica', body: 'Lexend' },
+  { id: 'cormorant-jost', heading: 'Cormorant', body: 'Jost' },
+  { id: 'anton-archivo', heading: 'Anton', body: 'Archivo' },
 ];
 
 const SPACING_OPTIONS = [

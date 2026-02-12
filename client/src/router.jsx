@@ -14,6 +14,13 @@ const PublicPortfolio = lazy(() => import('./pages/PublicPortfolio'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const SignIn = lazy(() => import('./pages/SignIn'));
 const SignUp = lazy(() => import('./pages/SignUp'));
+const Pricing = lazy(() => import('./pages/Pricing'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Privacy = lazy(() => import('./pages/Privacy'));
+const Terms = lazy(() => import('./pages/Terms'));
+const CheckoutSuccess = lazy(() => import('./pages/CheckoutSuccess'));
+const CheckoutCancel = lazy(() => import('./pages/CheckoutCancel'));
 
 function ProtectedRoute({ children }) {
   const { isSignedIn, isLoaded } = useUser();
@@ -56,7 +63,30 @@ export default function AppRouter() {
           }
         />
 
+        {/* Public */}
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
+
         {/* Protected routes */}
+        <Route
+          path="/checkout/success"
+          element={
+            <ProtectedRoute>
+              <CheckoutSuccess />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/checkout/cancel"
+          element={
+            <ProtectedRoute>
+              <CheckoutCancel />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/dashboard"
           element={

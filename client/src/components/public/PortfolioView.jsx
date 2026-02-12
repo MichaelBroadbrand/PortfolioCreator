@@ -8,6 +8,10 @@ import ImmersiveLayout from './layouts/ImmersiveLayout';
 import SplitLayout from './layouts/SplitLayout';
 import GridLayout from './layouts/GridLayout';
 import ShowcaseLayout from './layouts/ShowcaseLayout';
+import MagazineLayout from './layouts/MagazineLayout';
+import CardsLayout from './layouts/CardsLayout';
+import BlueprintLayout from './layouts/BlueprintLayout';
+import TechnicalLayout from './layouts/TechnicalLayout';
 
 // Layout registry
 const layouts = {
@@ -17,6 +21,10 @@ const layouts = {
   split: SplitLayout,
   grid: GridLayout,
   showcase: ShowcaseLayout,
+  magazine: MagazineLayout,
+  cards: CardsLayout,
+  blueprint: BlueprintLayout,
+  technical: TechnicalLayout,
 };
 
 // ─── Legacy section renderers (kept for editor preview backward compat) ───

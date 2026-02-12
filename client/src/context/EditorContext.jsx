@@ -1,6 +1,14 @@
 import { createContext, useContext, useReducer, useCallback } from 'react';
 import { MAX_SECTIONS } from '../utils/constants';
 
+// Generate a valid MongoDB ObjectId (24-char hex string)
+function generateObjectId() {
+  const ts = Math.floor(Date.now() / 1000).toString(16).padStart(8, '0');
+  let rand = '';
+  for (let i = 0; i < 16; i++) rand += Math.floor(Math.random() * 16).toString(16);
+  return ts + rand;
+}
+
 const EditorContext = createContext(null);
 
 const initialState = {
@@ -41,7 +49,7 @@ function editorReducer(state, action) {
     case 'ADD_SECTION': {
       if (state.portfolio.sections.length >= MAX_SECTIONS) return state;
       const newSection = {
-        _id: `temp-${Date.now()}`,
+        _id: generateObjectId(),
         type: action.payload.type,
         order: state.portfolio.sections.length,
         content: action.payload.defaultContent || {},

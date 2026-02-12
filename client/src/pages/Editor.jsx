@@ -39,7 +39,7 @@ const devices = [
   { id: 'mobile', icon: Smartphone },
 ];
 
-function SaveStatus({ status }) {
+function SaveStatus({ status, onRetry }) {
   switch (status) {
     case 'saved':
       return (
@@ -63,7 +63,7 @@ function SaveStatus({ status }) {
       return (
         <span className="flex items-center gap-1 text-sm text-error-600">
           <AlertCircle className="w-4 h-4" /> Save failed
-          <button className="text-xs underline ml-1">Retry</button>
+          <button className="text-xs underline ml-1" onClick={onRetry}>Retry</button>
         </span>
       );
     default:
@@ -98,13 +98,13 @@ function SectionEditPanel() {
   const PanelComponent = sectionPanelMap[section.type];
 
   return (
-    <div className="w-80 bg-white border-l flex flex-col shrink-0 overflow-hidden">
+    <div className="w-80 bg-surface-100 border-l border-white/[0.06] flex flex-col shrink-0 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
         <h3 className="text-sm font-semibold text-surface-900 capitalize">
           {section.type} Section
         </h3>
-        <button onClick={deselectSection} className="p-1 hover:bg-surface-100 rounded">
+        <button onClick={deselectSection} className="p-1 hover:bg-white/[0.06] rounded text-surface-500">
           <X className="w-4 h-4" />
         </button>
       </div>
@@ -121,7 +121,7 @@ function SectionEditPanel() {
       </div>
 
       {/* Footer */}
-      <div className="p-4 border-t">
+      <div className="p-4 border-t border-white/[0.06]">
         <Button variant="ghost" className="w-full" onClick={deselectSection}>
           Done
         </Button>
@@ -206,7 +206,7 @@ function EditorInner() {
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       {/* Top bar */}
-      <div className="h-14 bg-white border-b flex items-center justify-between px-4 shrink-0">
+      <div className="h-14 bg-surface-100 border-b border-white/[0.06] flex items-center justify-between px-4 shrink-0">
         {/* Left: back + name */}
         <div className="flex items-center gap-3">
           <Link
@@ -216,11 +216,11 @@ function EditorInner() {
             <ArrowLeft className="w-4 h-4" />
             Dashboard
           </Link>
-          <div className="w-px h-6 bg-surface-200" />
+          <div className="w-px h-6 bg-surface-400" />
           {editingName ? (
             <input
               autoFocus
-              className="text-sm font-semibold bg-transparent border-b border-brand-500 outline-none px-1"
+              className="text-sm font-semibold text-surface-900 bg-transparent border-b border-brand-500 outline-none px-1"
               value={portfolio.name}
               onChange={(e) => updateName(e.target.value)}
               onBlur={() => setEditingName(false)}
@@ -244,8 +244,8 @@ function EditorInner() {
               onClick={() => setPreviewDevice(id)}
               className={`p-2 rounded-lg transition-colors ${
                 previewDevice === id
-                  ? 'bg-brand-100 text-brand-600'
-                  : 'text-surface-400 hover:text-surface-600'
+                  ? 'bg-brand-500/10 text-brand-400'
+                  : 'text-surface-500 hover:text-surface-700'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -256,7 +256,7 @@ function EditorInner() {
         {/* Right: save status + actions */}
         <div className="flex items-center gap-3">
           <div className="group relative">
-            <SaveStatus status={saveStatus} />
+            <SaveStatus status={saveStatus} onRetry={manualSave} />
             {lastSavedAt && saveStatus === 'saved' && (
               <div className="absolute top-full right-0 mt-1 hidden group-hover:block bg-surface-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-10">
                 Last saved {new Date(lastSavedAt).toLocaleTimeString()}

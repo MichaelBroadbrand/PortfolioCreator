@@ -1,7 +1,22 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Palette, Github, Twitter } from 'lucide-react';
 
 export default function Footer() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const scrollToFeatures = (e) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/');
+      setTimeout(() => {
+        document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+      }, 150);
+    }
+  };
+
   return (
     <footer className="bg-surface-50 text-surface-500 py-12">
       <div className="max-w-7xl mx-auto px-4">
@@ -26,7 +41,7 @@ export default function Footer() {
             <h4 className="text-sm font-semibold text-surface-800 mb-4">Product</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#features" className="hover:text-brand-400 transition-colors">
+                <a href="/#features" onClick={scrollToFeatures} className="hover:text-brand-400 transition-colors">
                   Features
                 </a>
               </li>
@@ -36,9 +51,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-brand-400 transition-colors">
+                <Link to="/pricing" className="hover:text-brand-400 transition-colors">
                   Pricing
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -48,19 +63,14 @@ export default function Footer() {
             <h4 className="text-sm font-semibold text-surface-800 mb-4">Company</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="hover:text-brand-400 transition-colors">
+                <Link to="/about" className="hover:text-brand-400 transition-colors">
                   About
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-brand-400 transition-colors">
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-brand-400 transition-colors">
+                <Link to="/contact" className="hover:text-brand-400 transition-colors">
                   Contact
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -70,14 +80,14 @@ export default function Footer() {
             <h4 className="text-sm font-semibold text-surface-800 mb-4">Legal</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="hover:text-brand-400 transition-colors">
+                <Link to="/privacy" className="hover:text-brand-400 transition-colors">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-brand-400 transition-colors">
+                <Link to="/terms" className="hover:text-brand-400 transition-colors">
                   Terms of Service
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
