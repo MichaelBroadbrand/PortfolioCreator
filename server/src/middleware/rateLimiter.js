@@ -16,4 +16,12 @@ const publicLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-module.exports = { authLimiter, publicLimiter };
+const aiLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 5,
+  message: { success: false, message: 'Too many AI requests. Please wait a moment and try again.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+module.exports = { authLimiter, publicLimiter, aiLimiter };

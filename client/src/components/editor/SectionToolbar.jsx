@@ -15,6 +15,7 @@ import {
   FileText,
   ChevronLeft,
   ChevronRight,
+  Sparkles,
 } from 'lucide-react';
 import { useEditor } from '../../context/EditorContext';
 import { sectionLabels } from './SectionRenderer';
@@ -36,6 +37,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import ThemePanel from './ThemePanel';
+import AiPanel from './AiPanel';
 
 const sectionIcons = {
   hero: Layout,
@@ -201,12 +203,21 @@ export default function SectionToolbar() {
         >
           Theme
         </button>
+        <button
+          onClick={() => setSidebarTab('ai')}
+          className={`flex items-center justify-center gap-1 flex-1 py-3 text-sm font-medium text-center transition-colors ${
+            sidebarTab === 'ai' ? 'text-brand-400 border-b-2 border-brand-400' : 'text-surface-500 hover:text-surface-700'
+          }`}
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+          AI
+        </button>
         <button onClick={toggleSidebar} className="px-2 text-surface-500 hover:text-surface-700">
           <ChevronLeft className="w-4 h-4" />
         </button>
       </div>
 
-      {sidebarTab === 'sections' ? (
+      {sidebarTab === 'sections' && (
         <div className="flex-1 overflow-auto p-3">
           {/* Section list with drag-drop */}
           <DndContext
@@ -246,9 +257,15 @@ export default function SectionToolbar() {
             </div>
           )}
         </div>
-      ) : (
+      )}
+      {sidebarTab === 'theme' && (
         <div className="flex-1 overflow-auto p-3">
           <ThemePanel />
+        </div>
+      )}
+      {sidebarTab === 'ai' && (
+        <div className="flex-1 overflow-auto p-3">
+          <AiPanel />
         </div>
       )}
     </div>

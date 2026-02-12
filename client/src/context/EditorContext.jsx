@@ -8,7 +8,7 @@ const initialState = {
   selectedSectionId: null,
   saveStatus: 'saved', // 'saved' | 'saving' | 'unsaved' | 'error'
   lastSavedAt: null,
-  sidebarTab: 'sections', // 'sections' | 'theme'
+  sidebarTab: 'sections', // 'sections' | 'theme' | 'ai'
   sidebarCollapsed: false,
   previewDevice: 'desktop', // 'desktop' | 'tablet' | 'mobile'
   isDirty: false,

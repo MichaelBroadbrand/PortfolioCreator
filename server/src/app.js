@@ -11,6 +11,8 @@ const uploadRoutes = require('./routes/upload.routes');
 const publicRoutes = require('./routes/public.routes');
 const userRoutes = require('./routes/user.routes');
 const analyticsRoutes = require('./routes/analytics.routes');
+const aiRoutes = require('./routes/ai.routes');
+const { aiLimiter } = require('./middleware/rateLimiter');
 
 const app = express();
 
@@ -54,6 +56,7 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/public', publicRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/ai', aiLimiter, aiRoutes);
 
 // Error handler (must be last)
 app.use(errorHandler);
