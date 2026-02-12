@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Search as SearchIcon } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Search as SearchIcon, ChevronDown, Check } from 'lucide-react';
 import { TEMPLATE_CATEGORIES } from '../../utils/constants';
 import { getTemplates } from '../../services/templateService';
 import TemplateCard from './TemplateCard';
@@ -16,11 +16,27 @@ function SkeletonCard() {
   );
 }
 
+const sortOptions = [
+  { value: 'popular', label: 'Popular' },
+  { value: 'newest', label: 'Newest' },
+];
+
 export default function TemplateGallery({ onPreview }) {
   const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('All');
   const [sort, setSort] = useState('popular');
+  const [sortOpen, setSortOpen] = useState(false);
+  const sortRef = useRef(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClick(e) {
+      if (sortRef.current && !sortRef.current.contains(e.target)) setSortOpen(false);
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -52,14 +68,30 @@ export default function TemplateGallery({ onPreview }) {
           ))}
         </div>
 
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          className="px-3 py-1.5 rounded-lg border border-white/[0.1] bg-white/[0.06] text-sm text-surface-800 focus:outline-none focus:ring-2 focus:ring-brand-500/50"
-        >
-          <option value="popular">Popular</option>
-          <option value="newest">Newest</option>
-        </select>
+        <div className="relative" ref={sortRef}>
+          <button
+            onClick={() => setSortOpen(!sortOpen)}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/[0.1] bg-white/[0.06] text-sm text-surface-800 hover:bg-white/[0.1] transition-colors"
+          >
+            {sortOptions.find((o) => o.value === sort)?.label}
+            <ChevronDown className={`w-3.5 h-3.5 text-surface-500 transition-transform ${sortOpen ? 'rotate-180' : ''}`} />
+          </button>
+          {sortOpen && (
+            <div className="absolute right-0 mt-1 w-36 rounded-lg border border-white/[0.1] bg-surface-100 shadow-lg shadow-black/20 py-1 z-20">
+              {sortOptions.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => { setSort(opt.value); setSortOpen(false); }}
+                  className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-white/[0.06] transition-colors"
+                  style={{ color: sort === opt.value ? 'var(--color-brand-400)' : 'var(--color-surface-700)' }}
+                >
+                  {opt.label}
+                  {sort === opt.value && <Check className="w-3.5 h-3.5" />}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Grid */}
