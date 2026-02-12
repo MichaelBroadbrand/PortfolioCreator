@@ -64,6 +64,7 @@ const portfolioSchema = new mongoose.Schema(
       description: { type: String, default: '' },
       ogImage: { type: String, default: '' },
     },
+    _defaultTheme: { type: mongoose.Schema.Types.Mixed },
     customDomain: { type: String, default: '' },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date, default: null },

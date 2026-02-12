@@ -47,6 +47,16 @@ const SPACING_OPTIONS = [
   { id: 'spacious', label: 'Spacious' },
 ];
 
+/* WCAG relative luminance — used to detect light vs dark colors */
+function luminance(hex) {
+  if (!hex || hex.length < 7) return 0.5;
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  const lin = (c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+}
+
 function ColorSwatch({ color, isActive, onClick, label }) {
   return (
     <button
@@ -252,7 +262,17 @@ export default function ThemePanel() {
             <button
               key={id}
               type="button"
-              onClick={() => updateTheme({ mode: id })}
+              onClick={() => {
+                const bg = colorScheme.background || '#ffffff';
+                const txt = colorScheme.text || '#000000';
+                const bgIsLight = luminance(bg) > 0.5;
+                // Swap bg/text when switching to a mode that conflicts with current colors
+                if ((id === 'dark' && bgIsLight) || (id === 'light' && !bgIsLight)) {
+                  updateTheme({ mode: id, colorScheme: { ...colorScheme, background: txt, text: bg } });
+                } else {
+                  updateTheme({ mode: id });
+                }
+              }}
               className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-colors ${
                 theme.mode === id
                   ? 'bg-brand-500 text-surface-50'

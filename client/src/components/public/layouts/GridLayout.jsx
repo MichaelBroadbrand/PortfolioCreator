@@ -3,6 +3,12 @@ import { Github as GithubIcon, Linkedin, Twitter, Globe } from 'lucide-react';
 
 /* ── Helpers ─────────────────────────────────────────────────────────── */
 
+const spacingMap = {
+  compact:  { hero: 'px-6 md:px-10 py-8 md:py-14',  section: 'px-6 md:px-10 py-4', inner: 'px-6 md:px-10 py-4', footer: 'px-6 md:px-10 py-4' },
+  normal:   { hero: 'px-6 md:px-10 py-12 md:py-20', section: 'px-6 md:px-10 py-6', inner: 'px-6 md:px-10 py-8', footer: 'px-6 md:px-10 py-6' },
+  spacious: { hero: 'px-8 md:px-14 py-16 md:py-28', section: 'px-8 md:px-14 py-8', inner: 'px-8 md:px-14 py-10', footer: 'px-8 md:px-14 py-8' },
+};
+
 const border = (cs) => `2px solid ${cs.text}`;
 const LABELS = { about: 'About', projects: 'Projects', skills: 'Skills', experience: 'Experience',
   education: 'Education', testimonials: 'Testimonials', contact: 'Contact', custom: 'Custom' };
@@ -11,9 +17,9 @@ const hoverOut = (cs) => (e) => { e.currentTarget.style.backgroundColor = 'trans
 
 /* ── Section Renderers ───────────────────────────────────────────────── */
 
-function Hero({ content, cs, fonts }) {
+function Hero({ content, cs, fonts, sp }) {
   return (
-    <section id="hero" className="w-full px-6 md:px-10 py-12 md:py-20" style={{ borderBottom: border(cs) }}>
+    <section id="hero" className={`w-full ${sp.hero}`} style={{ borderBottom: border(cs) }}>
       <p className="text-xs md:text-sm font-bold tracking-[0.25em] mb-4"
         style={{ fontFamily: fonts.body, color: cs.text, opacity: 0.6, textTransform: 'uppercase' }}>
         {content.subtitle || 'NICE TO MEET YOU!'}
@@ -129,12 +135,12 @@ function Skills({ content, cs, fonts }) {
   );
 }
 
-function Experience({ content, cs, fonts }) {
+function Experience({ content, cs, fonts, sp }) {
   const entries = content.entries || [];
   return (
     <div>
       {entries.map((e, i) => (
-        <div key={i} className="px-6 md:px-10 py-6"
+        <div key={i} className={sp.section}
           style={{ borderBottom: i < entries.length - 1 ? border(cs) : 'none' }}>
           <h3 className="text-xl md:text-2xl font-bold tracking-tight"
             style={{ fontFamily: fonts.heading, color: cs.text, textTransform: 'uppercase' }}>
@@ -158,12 +164,12 @@ function Experience({ content, cs, fonts }) {
   );
 }
 
-function Education({ content, cs, fonts }) {
+function Education({ content, cs, fonts, sp }) {
   const entries = content.entries || [];
   return (
     <div>
       {entries.map((e, i) => (
-        <div key={i} className="px-6 md:px-10 py-6"
+        <div key={i} className={sp.section}
           style={{ borderBottom: i < entries.length - 1 ? border(cs) : 'none' }}>
           <h3 className="text-xl md:text-2xl font-bold tracking-tight"
             style={{ fontFamily: fonts.heading, color: cs.text, textTransform: 'uppercase' }}>
@@ -187,12 +193,12 @@ function Education({ content, cs, fonts }) {
   );
 }
 
-function Testimonials({ content, cs, fonts }) {
+function Testimonials({ content, cs, fonts, sp }) {
   const testimonials = content.testimonials || [];
   return (
     <div>
       {testimonials.map((t, i) => (
-        <div key={i} className="px-6 md:px-10 py-8"
+        <div key={i} className={sp.inner}
           style={{ borderBottom: i < testimonials.length - 1 ? border(cs) : 'none' }}>
           <p className="text-lg md:text-xl font-bold leading-snug mb-4"
             style={{ fontFamily: fonts.heading, color: cs.text }}>
@@ -223,9 +229,9 @@ const SOCIALS = [
   { key: 'website', icon: Globe, label: 'Website' },
 ];
 
-function Contact({ content, cs, fonts, slug, theme }) {
+function Contact({ content, cs, fonts, slug, theme, sp }) {
   return (
-    <div className="px-6 md:px-10 py-8">
+    <div className={sp.inner}>
       {content.email && (
         <a href={`mailto:${content.email}`}
           className="inline-block text-sm font-bold tracking-[0.15em] underline mb-6"
@@ -254,9 +260,9 @@ function Contact({ content, cs, fonts, slug, theme }) {
   );
 }
 
-function Custom({ content, cs }) {
+function Custom({ content, cs, sp }) {
   return (
-    <div className="px-6 md:px-10 py-8">
+    <div className={sp.inner}>
       <div className="prose prose-lg max-w-none" style={{ color: cs.text, opacity: 0.85 }}
         dangerouslySetInnerHTML={{ __html: content.body || '' }} />
     </div>
@@ -274,6 +280,7 @@ export default function GridLayout({ portfolio, editorProps }) {
   const theme = portfolio.theme || {};
   const cs = theme.colorScheme || {};
   const fonts = parseFontPairing(theme.fontPairing);
+  const sp = spacingMap[theme.spacing] || spacingMap.normal;
   useGoogleFonts(theme.fontPairing);
   const SectionWrap = editorProps?.SectionWrapper;
 
@@ -285,7 +292,7 @@ export default function GridLayout({ portfolio, editorProps }) {
   const heroSection = visible.find((s) => s.type === 'hero');
 
   const heroEl = heroSection
-    ? <Hero content={heroSection.content || {}} cs={cs} fonts={fonts} />
+    ? <Hero content={heroSection.content || {}} cs={cs} fonts={fonts} sp={sp} />
     : null;
 
   return (
@@ -337,9 +344,9 @@ export default function GridLayout({ portfolio, editorProps }) {
             </div>
             {section.type === 'contact' ? (
               <Contact content={section.content || {}} cs={cs} fonts={fonts}
-                slug={portfolio.slug} theme={theme} />
+                slug={portfolio.slug} theme={theme} sp={sp} />
             ) : Renderer ? (
-              <Renderer content={section.content || {}} cs={cs} fonts={fonts} />
+              <Renderer content={section.content || {}} cs={cs} fonts={fonts} sp={sp} />
             ) : null}
           </section>
         );
@@ -350,7 +357,7 @@ export default function GridLayout({ portfolio, editorProps }) {
       })}
 
       {/* ── Footer ───────────────────────────────────────────────────── */}
-      <footer className="px-6 md:px-10 py-6 flex flex-col md:flex-row items-center justify-between gap-4"
+      <footer className={`${sp.footer} flex flex-col md:flex-row items-center justify-between gap-4`}
         style={{ borderTop: border(cs) }}>
         <p className="text-xs font-bold tracking-[0.15em]"
           style={{ color: cs.text, opacity: 0.4, textTransform: 'uppercase' }}>

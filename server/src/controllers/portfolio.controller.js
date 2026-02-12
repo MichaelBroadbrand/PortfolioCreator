@@ -70,6 +70,7 @@ async function createFromTemplate(req, res, next) {
           sections,
           theme: { ...template.defaultTheme },
           layout: template.layout || 'standard',
+          _defaultTheme: { ...template.defaultTheme },
         });
         break;
       } catch (err) {
