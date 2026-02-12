@@ -2,10 +2,17 @@ import { Github, Linkedin, Twitter, Globe, Mail, ExternalLink } from 'lucide-rea
 import ContactForm from '../ContactForm';
 
 /**
- * Parse a "HeadingFont + BodyFont" string into separate font families.
+ * Parse a font pairing into separate font families.
+ * Accepts either an object { heading, body } or a "HeadingFont + BodyFont" string.
  */
 export function parseFontPairing(fontPairing) {
   if (!fontPairing) return { heading: 'sans-serif', body: 'sans-serif' };
+  if (typeof fontPairing === 'object') {
+    return {
+      heading: fontPairing.heading || 'sans-serif',
+      body: fontPairing.body || 'sans-serif',
+    };
+  }
   const parts = fontPairing.split('+').map((s) => s.trim());
   return {
     heading: parts[0] || 'sans-serif',
