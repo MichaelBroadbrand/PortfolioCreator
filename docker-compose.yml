@@ -18,7 +18,7 @@ services:
     ports:
       - "5001:5000"
     env_file:
-      - ./server/serversecrets.env
+      - "./server/serversecrets.env"
     environment:
       - MONGODB_URI=mongodb://mongo:27017/portfolio-builder
       - CLIENT_URL=http://localhost:5173
@@ -36,7 +36,7 @@ services:
     ports:
       - "5173:5173"
     env_file:
-      - ./client/clientsecrets.env
+      - "./client/clientsecrets.env"
     environment:
       - VITE_DEV_API_TARGET=http://server:5000
       - VITE_API_URL=/api
