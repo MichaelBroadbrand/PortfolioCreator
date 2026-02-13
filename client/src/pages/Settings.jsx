@@ -1,16 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
-import { User, Shield, Bell, AlertTriangle, Camera, Loader2 } from 'lucide-react';
+import { User, Shield, Bell, AlertTriangle, Camera, Loader2, CreditCard, Zap } from 'lucide-react';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import Button from '../components/common/Button';
 import Input from '../components/common/Input';
 import ConfirmDialog from '../components/common/ConfirmDialog';
 import { useToast } from '../context/ThemeContext';
 import { getProfile, updateProfile, deleteAccount } from '../services/userService';
+import { createCheckoutSession, createPortalSession } from '../services/billingService';
 import useImageUpload from '../hooks/useImageUpload';
 
 const tabs = [
   { id: 'profile', label: 'Profile', icon: User },
   { id: 'account', label: 'Account', icon: Shield },
+  { id: 'billing', label: 'Billing', icon: CreditCard },
   { id: 'notifications', label: 'Notifications', icon: Bell },
   { id: 'danger', label: 'Danger Zone', icon: AlertTriangle },
 ];
@@ -211,6 +213,81 @@ function DangerTab({ onDelete }) {
   );
 }
 
+function BillingTab({ profile }) {
+  const toast = useToast();
+  const [loading, setLoading] = useState(false);
+
+  const isPro = profile.plan === 'pro';
+
+  const handleManageSubscription = async () => {
+    setLoading(true);
+    try {
+      const { url } = await createPortalSession();
+      window.location.href = url;
+    } catch (err) {
+      toast.error(err.message || 'Failed to open billing portal');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpgrade = async () => {
+    setLoading(true);
+    try {
+      const { url } = await createCheckoutSession();
+      window.location.href = url;
+    } catch (err) {
+      toast.error(err.message || 'Failed to start checkout');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold text-surface-900 mb-4">Billing & Subscription</h3>
+        <div className="space-y-4 max-w-md">
+          <div className="bg-white/[0.04] border border-white/[0.06] rounded-lg p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-surface-700">Current Plan</p>
+                <p className="text-lg font-semibold text-surface-900 capitalize">{profile.plan || 'Free'}</p>
+              </div>
+              {isPro && (
+                <span className="px-2 py-1 text-xs font-medium rounded-full bg-brand-500/10 text-brand-400">
+                  Active
+                </span>
+              )}
+            </div>
+            {isPro && profile.subscriptionStatus && (
+              <p className="text-xs text-surface-500 mt-2">
+                Status: <span className="capitalize">{profile.subscriptionStatus}</span>
+              </p>
+            )}
+          </div>
+
+          {isPro ? (
+            <>
+              <Button onClick={handleManageSubscription} loading={loading} variant="ghost">
+                Manage Subscription
+              </Button>
+              <p className="text-xs text-surface-500">
+                Manage your payment method, view invoices, or cancel your subscription through the Customer Portal.
+              </p>
+            </>
+          ) : (
+            <Button onClick={handleUpgrade} loading={loading} variant="gold">
+              <Zap className="w-4 h-4 mr-1" />
+              Upgrade to Pro — $9/mo
+            </Button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Settings() {
   const toast = useToast();
   const [activeTab, setActiveTab] = useState('profile');
@@ -294,6 +371,7 @@ export default function Settings() {
               <>
                 {activeTab === 'profile' && <ProfileTab profile={profile} onSave={handleSave} />}
                 {activeTab === 'account' && <AccountTab profile={profile} />}
+                {activeTab === 'billing' && <BillingTab profile={profile} />}
                 {activeTab === 'notifications' && <NotificationsTab profile={profile} onSave={handleSave} />}
                 {activeTab === 'danger' && <DangerTab onDelete={handleDeleteAccount} />}
               </>

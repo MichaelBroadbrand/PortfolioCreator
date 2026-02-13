@@ -3,7 +3,10 @@ const Portfolio = require('../models/Portfolio');
 
 exports.getProfile = async (req, res, next) => {
   try {
-    res.json({ success: true, data: req.user });
+    const user = req.user.toObject();
+    delete user.lsCustomerId;
+    delete user.lsSubscriptionId;
+    res.json({ success: true, data: user });
   } catch (error) {
     next(error);
   }

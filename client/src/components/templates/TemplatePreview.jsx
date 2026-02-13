@@ -31,7 +31,7 @@ export default function TemplatePreview({ template, onBack, onUse, loading }) {
   return (
     <div className="fixed inset-0 z-50 bg-surface-50 flex flex-col">
       {/* Top bar */}
-      <div className="h-14 bg-surface-100 border-b border-white/[0.06] flex items-center justify-between px-4 shrink-0">
+      <div className="h-14 bg-surface-100 border-b border-white/[0.06] flex items-center justify-between px-4 shrink-0 relative z-40">
         <button
           onClick={onBack}
           className="flex items-center gap-2 text-sm text-surface-600 hover:text-surface-800 transition-colors"
@@ -61,8 +61,12 @@ export default function TemplatePreview({ template, onBack, onUse, loading }) {
         </Button>
       </div>
 
-      {/* Preview container — renders the actual layout */}
-      <div className="flex-1 overflow-auto bg-surface-50 flex justify-center">
+      {/* Preview container — transform creates a containing block so
+           fixed-position elements (e.g. SidebarLayout) stay within this area */}
+      <div
+        className="flex-1 overflow-auto bg-surface-50 flex justify-center"
+        style={{ transform: 'translateZ(0)' }}
+      >
         <div
           className="transition-all duration-300 overflow-auto"
           style={{

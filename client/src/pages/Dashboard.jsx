@@ -13,7 +13,6 @@ import {
   deletePortfolio,
 } from '../services/portfolioService';
 import { getAnalyticsOverview } from '../services/analyticsService';
-import { MAX_PORTFOLIOS_FREE } from '../utils/constants';
 
 function StatCard({ icon: Icon, label, value, color }) {
   return (
@@ -36,6 +35,9 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [totalViews, setTotalViews] = useState(0);
+
+  // TODO: Re-enable plan checks when billing is live
+  const isPro = true;
 
   useEffect(() => {
     loadPortfolios();
@@ -88,8 +90,6 @@ export default function Dashboard() {
   }
 
   const publishedCount = portfolios.filter((p) => p.status === 'published').length;
-  const atLimit = portfolios.length >= MAX_PORTFOLIOS_FREE;
-  const nearLimit = portfolios.length >= MAX_PORTFOLIOS_FREE - 1;
 
   return (
     <DashboardLayout>
@@ -105,23 +105,9 @@ export default function Dashboard() {
           <StatCard icon={Globe} label="Published" value={publishedCount} color="bg-blue-500/10 text-blue-400" />
         </div>
 
-        {nearLimit && !atLimit && (
-          <div className="mb-4 bg-brand-500/10 border border-brand-500/20 rounded-lg px-4 py-3 flex items-center justify-between">
-            <p className="text-sm text-brand-400">
-              You've used {portfolios.length} of {MAX_PORTFOLIOS_FREE} free portfolios. Upgrade for unlimited.
-            </p>
-            <button
-              onClick={() => toast.info('Upgrade plans coming soon!')}
-              className="text-sm font-medium text-brand-400 hover:text-brand-300 underline"
-            >
-              Upgrade
-            </button>
-          </div>
-        )}
-
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-surface-900">Your Portfolios</h2>
-          <Button size="sm" onClick={() => navigate('/templates')} disabled={atLimit}>
+          <Button size="sm" onClick={() => navigate('/templates')}>
             <Plus className="w-4 h-4 mr-1" /> Create New
           </Button>
         </div>

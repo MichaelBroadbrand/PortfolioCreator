@@ -10,6 +10,9 @@ import {
   ArrowRight,
   Layout,
   Users,
+  Check,
+  Sparkles,
+  Zap,
 } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -301,6 +304,76 @@ export default function Landing() {
                 <p className="text-sm text-surface-600 max-w-xs">{desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-20 bg-surface-100 scroll-mt-20">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2
+            className="text-3xl font-bold text-surface-900 mb-4 font-heading text-center opacity-0 translate-y-4 transition-all duration-700"
+            data-reveal
+          >
+            Simple, Transparent Pricing
+          </h2>
+          <p
+            className="text-surface-600 text-lg text-center mb-12 opacity-0 translate-y-4 transition-all duration-700 delay-100"
+            data-reveal
+          >
+            Start free. Upgrade when you need more power.
+          </p>
+
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto opacity-0 translate-y-4 transition-all duration-700 delay-200"
+            data-reveal
+          >
+            {/* Free Plan */}
+            <div className="bg-white/[0.06] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-8 hover:border-white/[0.12] transition-all">
+              <h3 className="text-lg font-semibold text-surface-900 mb-1">Free</h3>
+              <p className="text-sm text-surface-500 mb-4">Perfect for getting started</p>
+              <div className="mb-6">
+                <span className="text-4xl font-bold text-surface-900">$0</span>
+                <span className="text-surface-500 ml-1">forever</span>
+              </div>
+              <ul className="space-y-2.5 mb-8">
+                {['Up to 5 portfolios', '10 professional templates', 'Custom themes', 'Analytics dashboard', 'SEO optimisation'].map((f) => (
+                  <li key={f} className="flex items-center gap-2 text-sm text-surface-700">
+                    <Check className="w-4 h-4 text-brand-400 shrink-0" /> {f}
+                  </li>
+                ))}
+              </ul>
+              <Link to="/sign-up">
+                <Button variant="outline-white" className="w-full">Get Started</Button>
+              </Link>
+            </div>
+
+            {/* Pro Plan */}
+            <div className="relative bg-white/[0.06] backdrop-blur-xl border border-brand-500/30 rounded-2xl p-8 hover:border-brand-500/50 transition-all">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <span className="px-3 py-1 text-xs font-semibold bg-brand-500 text-surface-50 rounded-full flex items-center gap-1">
+                  <Sparkles className="w-3 h-3" /> Popular
+                </span>
+              </div>
+              <h3 className="text-lg font-semibold text-surface-900 mb-1">Pro</h3>
+              <p className="text-sm text-surface-500 mb-4">For professionals who want more</p>
+              <div className="mb-6">
+                <span className="text-4xl font-bold text-surface-900">$9</span>
+                <span className="text-surface-500 ml-1">/month</span>
+              </div>
+              <ul className="space-y-2.5 mb-8">
+                {['Unlimited portfolios', 'AI content generation', 'All free features', 'Premium templates (coming soon)', 'Priority support'].map((f) => (
+                  <li key={f} className="flex items-center gap-2 text-sm text-surface-700">
+                    <Check className="w-4 h-4 text-brand-400 shrink-0" /> {f}
+                  </li>
+                ))}
+              </ul>
+              <Link to="/sign-up">
+                <Button variant="gold" className="w-full">
+                  <Zap className="w-4 h-4 mr-1" /> Get Started
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

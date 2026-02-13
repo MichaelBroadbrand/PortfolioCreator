@@ -5,6 +5,7 @@ import { generatePortfolioContent } from '../../services/aiService';
 
 const PLACEHOLDER_TEXT = `Example: "I'm Sarah Chen, a full-stack developer with 5 years of experience. I work mainly with React, Node.js, and PostgreSQL. I graduated from MIT with a CS degree in 2019. Currently I'm a senior developer at TechCorp. My main projects include a real-time chat app and an e-commerce platform. You can reach me at sarah@example.com, and my GitHub is github.com/sarahchen."`;
 
+// TODO: Re-enable plan gating when billing is live
 export default function AiPanel() {
   const { portfolio, updateSectionContent } = useEditor();
   const [description, setDescription] = useState('');
