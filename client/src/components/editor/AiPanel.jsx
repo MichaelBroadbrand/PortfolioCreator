@@ -1,30 +1,60 @@
 import { useState } from 'react';
-import { Sparkles, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Sparkles, Loader2, AlertCircle, CheckCircle2, Globe } from 'lucide-react';
 import { useEditor } from '../../context/EditorContext';
 import { generatePortfolioContent } from '../../services/aiService';
 
 const PLACEHOLDER_TEXT = `Example: "I'm Sarah Chen, a full-stack developer with 5 years of experience. I work mainly with React, Node.js, and PostgreSQL. I graduated from MIT with a CS degree in 2019. Currently I'm a senior developer at TechCorp. My main projects include a real-time chat app and an e-commerce platform. You can reach me at sarah@example.com, and my GitHub is github.com/sarahchen."`;
 
+function isLinkedInUrl(urlString) {
+  try {
+    const hostname = new URL(urlString).hostname.toLowerCase();
+    return hostname === 'linkedin.com' || hostname === 'www.linkedin.com' || hostname.endsWith('.linkedin.com');
+  } catch {
+    return false;
+  }
+}
+
 // TODO: Re-enable plan gating when billing is live
 export default function AiPanel() {
   const { portfolio, updateSectionContent } = useEditor();
   const [description, setDescription] = useState('');
+  const [url, setUrl] = useState('');
   const [status, setStatus] = useState('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [updatedCount, setUpdatedCount] = useState(0);
 
+  const hasDescription = description.trim().length >= 10;
+  const hasUrl = url.trim().length > 0;
+  const urlIsLinkedIn = hasUrl && isLinkedInUrl(url.trim());
+  const hasUsableUrl = hasUrl && !urlIsLinkedIn;
+  const canGenerate = hasDescription || hasUsableUrl;
+
   const handleGenerate = async () => {
-    if (!description.trim() || description.trim().length < 10) {
-      setErrorMessage('Please write at least a couple of sentences about yourself.');
+    if (!canGenerate) {
+      setErrorMessage('Please provide a URL or write at least a couple of sentences about yourself.');
       setStatus('error');
       return;
+    }
+
+    if (hasUrl) {
+      try {
+        new URL(url.trim());
+      } catch {
+        setErrorMessage('Please enter a valid URL (e.g., https://github.com/username).');
+        setStatus('error');
+        return;
+      }
     }
 
     setStatus('loading');
     setErrorMessage('');
 
     try {
-      const content = await generatePortfolioContent(portfolio._id, description);
+      const content = await generatePortfolioContent(
+        portfolio._id,
+        hasDescription ? description : null,
+        hasUsableUrl ? url.trim() : null,
+      );
 
       let count = 0;
       const sections = portfolio.sections || [];
@@ -52,10 +82,47 @@ export default function AiPanel() {
           AI Portfolio Fill
         </h4>
         <p className="text-xs text-surface-400">
-          Describe yourself and let AI fill all your portfolio sections at once.
+          Paste a URL to your profile or describe yourself, and let AI fill all your portfolio sections at once.
         </p>
       </div>
 
+      {/* URL input */}
+      <div>
+        <label className="block text-xs font-medium text-surface-500 mb-1">
+          Import from URL
+        </label>
+        <div className="relative">
+          <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400 pointer-events-none" />
+          <input
+            type="url"
+            value={url}
+            onChange={(e) => {
+              setUrl(e.target.value);
+              if (status !== 'idle') setStatus('idle');
+            }}
+            placeholder="https://github.com/username"
+            className="w-full rounded-lg border border-white/[0.1] bg-white/[0.04] pl-9 pr-3 py-2 text-sm text-surface-800 placeholder:text-surface-400 focus:outline-none focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/30"
+          />
+        </div>
+        {urlIsLinkedIn ? (
+          <p className="text-[10px] text-accent-500 mt-1">
+            LinkedIn blocks automated access. Please copy your LinkedIn profile text and paste it in the description box below.
+          </p>
+        ) : (
+          <p className="text-[10px] text-surface-400 mt-1">
+            Works with GitHub, personal websites, and most public profiles.
+          </p>
+        )}
+      </div>
+
+      {/* Divider */}
+      <div className="flex items-center gap-2">
+        <div className="flex-1 border-t border-white/[0.06]" />
+        <span className="text-[10px] text-surface-400 uppercase">or describe yourself</span>
+        <div className="flex-1 border-t border-white/[0.06]" />
+      </div>
+
+      {/* Description textarea */}
       <div>
         <textarea
           value={description}
@@ -72,7 +139,7 @@ export default function AiPanel() {
           <span className="text-[10px] text-surface-400">
             {description.length}/5000
           </span>
-          {status === 'idle' && description.length > 0 && description.length < 10 && (
+          {status === 'idle' && description.length > 0 && description.length < 10 && !hasUrl && (
             <span className="text-[10px] text-accent-500">
               Write a bit more for better results
             </span>
@@ -82,7 +149,7 @@ export default function AiPanel() {
 
       <button
         onClick={handleGenerate}
-        disabled={status === 'loading' || description.trim().length < 10}
+        disabled={status === 'loading' || !canGenerate}
         className={`
           w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium
           transition-all duration-200
@@ -95,7 +162,7 @@ export default function AiPanel() {
         {status === 'loading' ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin" />
-            Generating...
+            {hasUsableUrl ? 'Fetching & Generating...' : 'Generating...'}
           </>
         ) : (
           <>
@@ -127,11 +194,11 @@ export default function AiPanel() {
       <div className="pt-2 border-t border-white/[0.06]">
         <p className="text-[10px] font-semibold text-surface-500 uppercase tracking-wider mb-2">Tips for better results</p>
         <ul className="space-y-1.5 text-xs text-surface-400">
+          <li>- Paste a GitHub or personal website URL for quick import</li>
           <li>- Include your full name and job title</li>
           <li>- List your key skills and technologies</li>
           <li>- Mention your work experience with company names</li>
           <li>- Add education details (degree, school)</li>
-          <li>- Include links to GitHub, LinkedIn, etc.</li>
           <li>- Describe your notable projects</li>
         </ul>
       </div>

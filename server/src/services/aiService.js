@@ -98,6 +98,8 @@ async function generatePortfolioContent(userDescription, existingSectionTypes) {
 
   const prompt = `${SYSTEM_PROMPT}
 
+Note: The user input may include text extracted from a webpage (GitHub, personal website, etc.). If so, treat the extracted text as information about the person and generate portfolio content from it. Ignore navigation menus, footer text, and other webpage artifacts.
+
 The portfolio currently has these section types: ${existingSectionTypes.join(', ')}
 Only generate content for sections that exist in the portfolio.
 
@@ -113,8 +115,12 @@ ${userDescription}`;
 // --- Smart mock content generator ---
 
 function extractName(text) {
-  // Pattern: "My name is X", "I'm X", "I am X", "name is X"
   const patterns = [
+    // "Name: Tapuwa Kabwato" (from GitHub API / structured data)
+    /^Name:\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/mi,
+    // "Name/Title: Tapuwa Kabwato" (from LinkedIn meta tags)
+    /^Name\/Title:\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/mi,
+    // "My name is X", "I'm X", "I am X", "name is X"
     /(?:my name is|i'm|i am|name is)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/i,
     /^([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/m,
   ];
