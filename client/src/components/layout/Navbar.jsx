@@ -106,7 +106,7 @@ export default function Navbar() {
                     </div>
                     <Link
                       to="/settings"
-                      className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-white/[0.06]"
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-white/[0.06]"
                       onClick={() => setDropdownOpen(false)}
                     >
                       <Settings className="w-4 h-4" />
@@ -114,7 +114,7 @@ export default function Navbar() {
                     </Link>
                     <a
                       href="#"
-                      className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-white/[0.06]"
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-white/[0.06]"
                     >
                       <HelpCircle className="w-4 h-4" />
                       Help
@@ -122,7 +122,7 @@ export default function Navbar() {
                     <div className="border-t border-white/[0.06] my-1" />
                     <button
                       onClick={() => signOut()}
-                      className="flex items-center gap-2 w-full px-4 py-2 text-sm text-surface-700 hover:bg-white/[0.06]"
+                      className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-300 hover:bg-white/[0.06]"
                     >
                       <LogOut className="w-4 h-4" />
                       Sign Out
@@ -159,91 +159,85 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile drawer */}
+      {/* Mobile dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 top-16 z-40">
-          <div
-            className="absolute inset-0 bg-black/60"
-            onClick={() => setMobileMenuOpen(false)}
-          />
-          <div className="absolute right-0 top-0 bottom-0 w-64 bg-surface-100 shadow-xl animate-in slide-in-from-right duration-300">
-            <div className="flex flex-col p-4 gap-2">
-              {isSignedIn ? (
-                <>
-                  <div className="flex items-center gap-3 p-3 mb-2">
-                    <img
-                      src={profileImage}
-                      alt={user?.fullName || 'User'}
-                      className="w-10 h-10 rounded-full"
-                    />
-                    <div>
-                      <p className="text-sm font-medium text-surface-900">{user?.fullName}</p>
-                      <p className="text-xs text-surface-500">
-                        {user?.primaryEmailAddress?.emailAddress}
-                      </p>
-                    </div>
+        <div className="md:hidden border-t border-white/[0.06]" style={{ backgroundColor: '#111111' }}>
+          <div className="flex flex-col p-4 gap-1">
+            {isSignedIn ? (
+              <>
+                <div className="flex items-center gap-3 p-3 mb-2">
+                  <img
+                    src={profileImage}
+                    alt={user?.fullName || 'User'}
+                    className="w-10 h-10 rounded-full"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-white">{user?.fullName}</p>
+                    <p className="text-xs text-gray-400">
+                      {user?.primaryEmailAddress?.emailAddress}
+                    </p>
                   </div>
-                  <Link
-                    to="/dashboard"
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/[0.06] text-sm text-surface-700"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <LayoutDashboard className="w-4 h-4" />
-                    Dashboard
-                  </Link>
-                  <Link
-                    to="/templates"
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/[0.06] text-sm text-surface-700"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Palette className="w-4 h-4" />
-                    Templates
-                  </Link>
-                  <Link
-                    to="/settings"
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/[0.06] text-sm text-surface-700"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Settings className="w-4 h-4" />
-                    Settings
-                  </Link>
-                  <div className="border-t border-white/[0.06] my-2" />
-                  <button
-                    onClick={() => signOut()}
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/[0.06] text-sm text-surface-700"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link
-                    to="/pricing"
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/[0.06] text-sm text-surface-700"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Pricing
-                  </Link>
-                  <Link
-                    to="/sign-in"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Button variant="ghost" className="w-full">
-                      Log In
-                    </Button>
-                  </Link>
-                  <Link
-                    to="/sign-up"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Button variant="gold" className="w-full">
-                      Get Started
-                    </Button>
-                  </Link>
-                </>
-              )}
-            </div>
+                </div>
+                <Link
+                  to="/dashboard"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 text-sm text-gray-300 hover:text-white transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <LayoutDashboard className="w-4 h-4" />
+                  Dashboard
+                </Link>
+                <Link
+                  to="/templates"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 text-sm text-gray-300 hover:text-white transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Palette className="w-4 h-4" />
+                  Templates
+                </Link>
+                <Link
+                  to="/settings"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 text-sm text-gray-300 hover:text-white transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Settings className="w-4 h-4" />
+                  Settings
+                </Link>
+                <div className="border-t border-white/[0.08] my-2" />
+                <button
+                  onClick={() => signOut()}
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 text-sm text-gray-300 hover:text-white transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/pricing"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 text-sm text-gray-300 hover:text-white transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Pricing
+                </Link>
+                <Link
+                  to="/sign-in"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Button variant="ghost" className="w-full">
+                    Log In
+                  </Button>
+                </Link>
+                <Link
+                  to="/sign-up"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Button variant="gold" className="w-full">
+                    Get Started
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}

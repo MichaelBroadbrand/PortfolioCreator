@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Eye, MessageSquare, TrendingUp, TrendingDown, Calendar, BarChart3 } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Eye, MessageSquare, TrendingUp, TrendingDown, Calendar, BarChart3, ChevronDown, Check } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import { InlineLoader } from '../components/common/Loader';
@@ -53,6 +53,17 @@ export default function Analytics() {
   const [overview, setOverview] = useState(null);
   const [chartData, setChartData] = useState([]);
   const [selectedPortfolio, setSelectedPortfolio] = useState('all');
+  const [portfolioDropdownOpen, setPortfolioDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClick(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) setPortfolioDropdownOpen(false);
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   useEffect(() => {
     loadData();
@@ -137,16 +148,30 @@ export default function Analytics() {
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-surface-900">Views Over Time</h2>
                 {overview?.portfolios?.length > 0 && (
-                  <select
-                    value={selectedPortfolio}
-                    onChange={(e) => setSelectedPortfolio(e.target.value)}
-                    className="text-sm border border-white/[0.1] bg-white/[0.06] text-surface-800 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-500/50"
-                  >
-                    <option value="all">All Portfolios</option>
-                    {overview.portfolios.map((p) => (
-                      <option key={p.id} value={p.id}>{p.name}</option>
-                    ))}
-                  </select>
+                  <div className="relative" ref={dropdownRef}>
+                    <button
+                      onClick={() => setPortfolioDropdownOpen(!portfolioDropdownOpen)}
+                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/[0.1] bg-white/[0.06] text-sm text-surface-800 hover:bg-white/[0.1] transition-colors"
+                    >
+                      {selectedPortfolio === 'all' ? 'All Portfolios' : overview.portfolios.find((p) => p.id === selectedPortfolio)?.name}
+                      <ChevronDown className={`w-3.5 h-3.5 text-surface-500 transition-transform ${portfolioDropdownOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {portfolioDropdownOpen && (
+                      <div className="absolute right-0 mt-1 w-48 rounded-lg border border-white/[0.1] bg-surface-100 shadow-lg shadow-black/20 py-1 z-20">
+                        {[{ id: 'all', name: 'All Portfolios' }, ...overview.portfolios].map((opt) => (
+                          <button
+                            key={opt.id}
+                            onClick={() => { setSelectedPortfolio(opt.id); setPortfolioDropdownOpen(false); }}
+                            className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-white/[0.06] transition-colors"
+                            style={{ color: selectedPortfolio === opt.id ? 'var(--color-brand-400)' : 'var(--color-surface-700)' }}
+                          >
+                            {opt.name}
+                            {selectedPortfolio === opt.id && <Check className="w-3.5 h-3.5" />}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
 

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useUser } from '@clerk/clerk-react';
 import {
   Palette,
   Edit3,
@@ -84,6 +85,7 @@ const steps = [
 ];
 
 export default function Landing() {
+  const { isSignedIn } = useUser();
   const pageRef = useScrollReveal();
 
   return (
@@ -368,7 +370,7 @@ export default function Landing() {
                   </li>
                 ))}
               </ul>
-              <Link to="/sign-up">
+              <Link to={isSignedIn ? '/pricing' : '/sign-up'}>
                 <Button variant="gold" className="w-full">
                   <Zap className="w-4 h-4 mr-1" /> Get Started
                 </Button>
